@@ -1,0 +1,5 @@
+
+Name: Finnldy
+Entwickler: Muhammet Altuntas / Jakob Seeberger
+
+Die Anwendung ist eine Gruppen-Filmempfehlungs-App wie „Tinder für Filme“. Nutzer können gemeinsam mit Freunden oder Familie einer Lobby beitreten. Anschließend werden allen Teilnehmern Filme aus einer Datenbank vorgeschlagen. Jeder Nutzer kann einen Film liken, disliken oder als „schon gesehen“ markieren. Sobald alle Teilnehmer denselben Film geliked haben, wird dieser als gemeinsames Ergebnis angezeigt. Filme, die von einem Nutzer als „schon gesehen“ markiert wurden, werden aus der Auswahl ausgeschlossen. Falls nach 50 Swipes kein perfekter Treffer gefunden wurde, wird der Film mit der besten Bewertung angezeigt. Zusätzlich gibt es „Honorable Mentions“, bei denen die Plätze 2 bis 5 angezeigt werden. Nutzer können Filme außerdem zu einer „Später ansehen“-Liste hinzufügen und im Hauptmenü ihre gesehenen sowie gespeicherten Filme ansehen.
