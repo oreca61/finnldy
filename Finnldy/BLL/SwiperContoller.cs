@@ -22,17 +22,17 @@ namespace Finnldy.BLL
             return swipe;
         }
 
-        public Swipe WatchMovie(User user, Movies movie)
+        public Swipe AddWatchedMovie(User user, Movies movie)
         {
-            user.WatchMovie(movie);
+            user.AddWatchedMovie(movie);
 
             Swipe swipe = new Swipe(user, movie, SwipeType.Watched);
             return swipe;
         }
 
-        public Swipe WatchLaterMovie(User user, Movies movie)
+        public Swipe AddWatchLaterMovie(User user, Movies movie)
         {
-            user.WatchLaterMovie(movie);
+            user.AddWatchLaterMovie(movie);
             
             Swipe swipe = new Swipe(user, movie, SwipeType.WatchLater);
             return swipe;
