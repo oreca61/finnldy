@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Finnldy
+namespace Finnldy.DAL
 {
-    internal class Swipe
+    internal class Database
     {
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Finnldy
+namespace Finnldy.BLL
 {
     internal class Movies
     {
