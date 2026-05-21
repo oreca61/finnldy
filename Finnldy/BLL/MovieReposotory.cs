@@ -4,7 +4,19 @@ using System.Text;
 
 namespace Finnldy.BLL
 {
-    internal class MovieReposotory
+    public class MovieReposotory
     {
+        private List<Movies> movies = new List<Movies>();
+
+        public List<Movies> GetAllMovies() 
+        {
+            return movies;
+        }
+
+        public void AddMovie(Movies movie)
+        {
+            movies.Add(movie);
+        }
+
     }
 }
