@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
 Finnldy
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\App.xaml
-3-2126778509
+4-428241591
 
-18-942372800
+22-1540129488
 1981124507420
-UI\MainWindow.xaml;
+UI\LobbyView.xaml;UI\Moviecard.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
 
-False
+True
 

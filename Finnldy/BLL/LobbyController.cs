@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Finnldy.BLL
 {
-    internal class LobbyController
+    public class LobbyController
     {
     }
 }
