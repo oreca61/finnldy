@@ -4,7 +4,13 @@ using System.Text;
 
 namespace Finnldy.BLL
 {
-    internal class Lobby
+    public class Lobby
     {
+        private List<User> Users = new List<User>();
+        public void AddUser(User user) {
+            Users.Add(user);
+        }
+
+        public string Lobbycode;
     }
 }
