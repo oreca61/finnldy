@@ -24,5 +24,10 @@ namespace Finnldy.UI
         {
             InitializeComponent();
         }
+
+        private void InitializeComponent()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

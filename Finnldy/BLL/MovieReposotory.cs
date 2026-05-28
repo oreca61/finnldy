@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Finnldy.BLL
 {
     public class MovieReposotory
     {
-        private List<Movies> movies = new List<Movies>();
+        public List<Movies> movies = new List<Movies>();
 
         public List<Movies> GetAllMovies() 
         {
@@ -16,6 +17,11 @@ namespace Finnldy.BLL
         public void AddMovie(Movies movie)
         {
             movies.Add(movie);
+        }
+
+        public Movies FindMovieById(int id)
+        {
+            return movies.FirstOrDefault(movie => movie.ApiMovieId == id);
         }
 
     }

@@ -25,36 +25,86 @@ namespace Finnldy.BLL
         public void LoadAllMovies()
         {
             
+
+
         }
 
         
 
-        public ResponseToAPI HandleRequest(string status, int? movie_id, string? username)
+        public ResponseToAPI HandleRequest(GetDataFromAPI Data)
         {
-            if(status == "POST")
+            if(Data.Status == "POST")
             {
                 if(lobby.IsAtive == false)
                 {
-                    bool check = database.IsUserActive(username);
+                    bool check = database.IsUserActive(Data.Username);
 
                     if(check == true)
                     {
-                        User user = database.GetUser(username);
+                        User user = database.GetUser(Data.Username);
                         lobby.AddUser(user);
                     }
                     else
                     {
-                        CreateUser(username);
+                        CreateUser(Data.Username);
                     }
                     ResponseToAPI response = new ResponseToAPI(true, null, null);
                     return response;
 
                 }
             }
-            if(status == "GET")
+            if(Data.Status == "GET")
             {
 
+                if(Data.Action == GetDataFromAPI.action.Liked)
+                {
+                    User user = database.GetUser(Data.Username);
+                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
+
+                    user.LikeMovie(movie);
+
+                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
+                    return response;
+                    
+                }
+                if (Data.Action == GetDataFromAPI.action.Disliked)
+                {
+                    User user = database.GetUser(Data.Username);
+                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
+
+                    user.DislikeMovie(movie);
+
+                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
+                    return response;
+
+                }
+                if (Data.Action == GetDataFromAPI.action.Watchlater)
+                {
+                    User user = database.GetUser(Data.Username);
+                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
+
+                    user.AddWatchLaterMovie(movie);
+
+                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
+                    return response;
+
+                }
+                if (Data.Action == GetDataFromAPI.action.AlreadyWatched)
+                {
+                    User user = database.GetUser(Data.Username);
+                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
+
+                    user.AddWatchedMovie(movie);
+
+                    movies.movies.Remove(movie);
+                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
+                    return response;
+
+                }
+
             }
+            ResponseToAPI responseend = new ResponseToAPI(false, null, null);
+            return responseend;
         }
 
         public string Lobbycode()
@@ -92,6 +142,12 @@ namespace Finnldy.BLL
             Lobby Lobbynew = new Lobby();
 
             lobby = Lobbynew;
+        }
+
+        public Movies GetNextMovie(Movies movies)
+        {
+            Movies movies1 = new Movies("penis", "penis");
+            return movies1;
         }
     }
 }
