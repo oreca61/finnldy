@@ -18,6 +18,7 @@
                     
                     CornerRadius="15"
                     ClipToBounds="True"
+                     
                     Background="LightGray">
 
                 <Image Source= "{Binding Cover}"
@@ -32,7 +33,10 @@
             <TextBlock Text= "{Binding Name}"
                        Foreground= "White"
                        FontSize= "24"
+                       
+                       
                        FontWeight= "Bold"
+                       
                        Margin = "0,15,0,0"
                        TextAlignment = " Center"/>
             
