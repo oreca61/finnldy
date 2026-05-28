@@ -1,4 +1,5 @@
 ﻿using Finnldy.DAL;
+using Finnldy.DAL.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,16 +19,47 @@ namespace Finnldy.BLL
         {
             User user = new User(Name);
             lobby.AddUser(user);
+            // Musst es der Datenbank auch geben
         }
         
         public void LoadAllMovies()
         {
-            //TODO
+            
+        }
+
+        
+
+        public ResponseToAPI HandleRequest(string status, int? movie_id, string? username)
+        {
+            if(status == "POST")
+            {
+                if(lobby.IsAtive == false)
+                {
+                    bool check = database.IsUserActive(username);
+
+                    if(check == true)
+                    {
+                        User user = database.GetUser(username);
+                        lobby.AddUser(user);
+                    }
+                    else
+                    {
+                        CreateUser(username);
+                    }
+                    ResponseToAPI response = new ResponseToAPI(true, null, null);
+                    return response;
+
+                }
+            }
+            if(status == "GET")
+            {
+
+            }
         }
 
         public string Lobbycode()
         {
-            // TODO
+            
             return "unfinished";
         }
 

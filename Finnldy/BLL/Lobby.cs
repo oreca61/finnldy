@@ -10,6 +10,7 @@ namespace Finnldy.BLL
         public void AddUser(User user) {
             Users.Add(user);
         }
+        public bool IsAtive = false;
 
         public string Lobbycode;
     }
