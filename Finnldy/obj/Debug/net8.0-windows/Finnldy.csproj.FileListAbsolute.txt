@@ -4,3 +4,11 @@ C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\SwipeV
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.cache
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.lref
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\Moviecard.baml
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\Moviecard.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\ResultView.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\SwipeView.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.cache
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.lref

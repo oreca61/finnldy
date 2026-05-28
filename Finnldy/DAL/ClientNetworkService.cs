@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Finnldy.DAL
 {
-    internal class ClientNetworkService
+    public class ClientNetworkService
     {
     }
 }

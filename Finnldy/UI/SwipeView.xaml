@@ -6,7 +6,111 @@
         xmlns:local="clr-namespace:Finnldy.UI"
         mc:Ignorable="d"
         Title="SwipeView" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Swipe jetzt los"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="20"
+                Padding="15"
+                BorderBrush="#DDD"
+                BorderThickness="1">
+
+            <StackPanel>
+
+                <Border Height="300"
+                        Background="#E0E0E0">
+
+                    <Image x:Name="MovieCoverImage"
+                           Stretch="UniformToFill"/>
+                </Border>
+
+                <TextBlock x:Name="MovieTitleText"
+                           Text="Filmtitel"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           Margin="0,15,0,5"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock x:Name="MovieReleaseDateText"
+                           Text="Erscheinungsdatum"
+                           FontSize="14"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+
+                <ScrollViewer Height="120"
+                              VerticalScrollBarVisibility="Auto">
+
+                    <TextBlock x:Name="MovieDescriptionText"
+                               Text="Beschreibung des Films"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Foreground="#333"/>
+                </ScrollViewer>
+
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2"
+              Margin="0,20,0,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            
+
+            <Button x:Name="WatchedButton"
+                    Grid.Column="0"
+                    Content="👀"
+                    FontSize="30"
+                    Height="55"
+                    Margin="4"
+                    Click="WatchedButton_Click"/>
+
+            <Button x:Name="DislikeButton"
+                Grid.Column="1"
+                Content="👎"
+                FontSize="30" 
+                Height="55"
+                Margin="4"
+                Click="DislikeButton_Click"/>
+
+            <Button x:Name="LikeButton"
+                Grid.Column="2"
+                Content="👍"
+                FontSize="30"
+                Height="55"
+                Margin="4"
+                Click="LikeButton_Click"/>  
+
+
+            <Button x:Name="WatchLaterButton"
+                    Grid.Column="3"
+                    Content="🕑"
+                    FontSize="30"
+                    Height="55"
+                    Margin="4"
+                    Click="WatchLaterButton_Click"/>
+
+            
+        </Grid>
     </Grid>
 </Window>

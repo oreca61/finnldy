@@ -22,5 +22,25 @@ namespace Finnldy.UI
 
             InitializeComponent();
         }
+
+        private void DislikeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void WatchedButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void WatchLaterButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LikeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

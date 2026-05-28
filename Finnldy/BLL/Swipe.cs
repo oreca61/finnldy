@@ -10,6 +10,11 @@ namespace Finnldy.BLL
         public Movies Movies { get; private set; }
 
         public SwipeType Type { get; private set; }
+        
+        public Lobby lobby { get; private set; }
+
+
+
 
         public Swipe(User user, Movies movies, SwipeType type)
         {
