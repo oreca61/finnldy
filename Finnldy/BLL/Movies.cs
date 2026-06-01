@@ -23,5 +23,10 @@ namespace Finnldy.BLL
             Cover = cover;
             ReleaseDate = releaseDate;
         }
+        public Movies(string genre, string name)
+        {
+            this.Genre = genre;
+            this.Name = name;
+        }
     }
 }

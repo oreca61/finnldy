@@ -3,6 +3,7 @@ using Finnldy.DAL.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 
 namespace Finnldy.BLL
 {
@@ -107,11 +108,7 @@ namespace Finnldy.BLL
             return responseend;
         }
 
-        public string Lobbycode()
-        {
-            
-            return "unfinished";
-        }
+
 
         public void AddUser(string Name)
         {
@@ -120,12 +117,12 @@ namespace Finnldy.BLL
 
         public void CreateLobby (string Name)
         {
-            if(lobby == null)
+            if(lobby != null)
             {
                 return;
             }
 
-            lobby.Lobbycode = Lobbycode();
+            
             
 
 
@@ -144,10 +141,21 @@ namespace Finnldy.BLL
             lobby = Lobbynew;
         }
 
-        public Movies GetNextMovie(Movies movies)
+        public Movies GetNextMovie(Movies movie)
         {
-            Movies movies1 = new Movies("penis", "penis");
-            return movies1;
+            int index = movies.movies.IndexOf(movie);
+
+            if (index == -1)
+            {
+                return null;
+            }
+
+            if (index + 1 < movies.movies.Count)
+            {
+                return movies.movies[index + 1]; 
+            }
+
+            return null; 
         }
     }
 }
