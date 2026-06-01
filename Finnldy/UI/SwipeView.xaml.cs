@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finnldy.BLL;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,11 +22,26 @@ namespace Finnldy.UI
         {
 
             InitializeComponent();
+
+
+            Lobby lobby = new Lobby();
+            User currentUser = new User();
+
+
+            SwiperContoller swiperContoller = new SwiperContoller();
+            MovieReposotory movieReposotory = new MovieReposotory();
+
+        }
+
+
+        private async void SwipeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void DislikeButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void WatchedButton_Click(object sender, RoutedEventArgs e)
