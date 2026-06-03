@@ -8,33 +8,26 @@ namespace Finnldy.DAL.Database
 {
     public class Database
     {
-
         public User GetUser(string name)
         {
             // TODO
-            User user = new User("");
+            User user = new User(name);
             return user;
-
-            
         }
 
         public bool IsUserActive(string name)
         {
             // TODO
-            User user = new User("");
+            User user = new User(name);
             return true;
-
-
         }
 
         public void AddToWatched(User user, Movies movie)
         {
-
             string query = "INSERT INTO Watched (?, ?, ?) VALUES (UserName, Title, WatchedAt);";
         }
-        
 
-        private void ConnectToDatabase(String query)
+        private void ConnectToDatabase(string query)
         {
 
         }

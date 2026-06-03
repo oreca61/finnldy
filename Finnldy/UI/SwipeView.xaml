@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Finnldy.UI"
         mc:Ignorable="d"
-        Title="SwipeView" Height="450" Width="800">
+        Title="SwipeView" Height="450" Width="800"
+        Loaded="SwipeView_Loaded">
+
     <Grid Margin="20">
 
         <Grid.RowDefinitions>
@@ -30,11 +32,8 @@
 
             <StackPanel>
 
-                <Border Height="300"
-                        Background="#E0E0E0">
-
-                    <Image x:Name="MovieCoverImage"
-                           Stretch="UniformToFill"/>
+                <Border Height="300">
+                    <Image x:Name="MovieCoverImage"/>
                 </Border>
 
                 <TextBlock x:Name="MovieTitleText"
@@ -59,7 +58,7 @@
                                Text="Beschreibung des Films"
                                FontSize="14"
                                TextWrapping="Wrap"
-                               Foreground="#333"/>
+                               Foreground="Gray"/>
                 </ScrollViewer>
 
             </StackPanel>
@@ -75,42 +74,50 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            
-
             <Button x:Name="WatchedButton"
                     Grid.Column="0"
-                    Content="👀"
-                    FontSize="30"
-                    Height="55"
+                    Content="👀&#x0a;Schon gesehen"
+                    FontSize="18"
+                    Height="70"
                     Margin="4"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    TextBlock.TextAlignment="Center"
                     Click="WatchedButton_Click"/>
 
             <Button x:Name="DislikeButton"
-                Grid.Column="1"
-                Content="👎"
-                FontSize="30" 
-                Height="55"
-                Margin="4"
-                Click="DislikeButton_Click"/>
+                    Grid.Column="1"
+                    Content="👎&#x0a;Dislike"
+                    FontSize="18"
+                    Height="70"
+                    Margin="4"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    TextBlock.TextAlignment="Center"
+                    Click="DislikeButton_Click"/>
 
             <Button x:Name="LikeButton"
-                Grid.Column="2"
-                Content="👍"
-                FontSize="30"
-                Height="55"
-                Margin="4"
-                Click="LikeButton_Click"/>  
-
+                    Grid.Column="2"
+                    Content="👍&#x0a;Like"
+                    FontSize="18"
+                    Height="70"
+                    Margin="4"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    TextBlock.TextAlignment="Center"
+                    Click="LikeButton_Click"/>
 
             <Button x:Name="WatchLaterButton"
                     Grid.Column="3"
-                    Content="🕑"
-                    FontSize="30"
-                    Height="55"
+                    Content="🕑&#x0a;Später ansehen"
+                    FontSize="18"
+                    Height="70"
                     Margin="4"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    TextBlock.TextAlignment="Center"
                     Click="WatchLaterButton_Click"/>
 
-            
         </Grid>
     </Grid>
 </Window>

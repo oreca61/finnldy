@@ -9,7 +9,7 @@ namespace Finnldy.BLL
         public Swipe LikeMovie(User user,Movies movie)
         {
 
-            user.LikeMovie(movie);
+                user.LikeMovie(movie);
 
             Swipe swipe = new Swipe(user, movie, SwipeType.Like);
             return swipe;

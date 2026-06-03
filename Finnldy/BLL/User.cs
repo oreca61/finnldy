@@ -8,34 +8,40 @@ namespace Finnldy.BLL
     public class User
     {
         public string Name { get; private set; }
-        private List<Movies> liked = new List<Movies>();
-        private List<Movies> disliked = new List<Movies>();
-        private List<Movies> watched = new List<Movies>();
-        private List<Movies> watchlater = new List<Movies>();
-        private string genre;
-
-
+        public List<Movies> LikedMovies { get; private set; }
+        public List<Movies> DislikedMovies { get; private set; }
+        public List<Movies> WatchedMovies { get; private set; }
+        public List<Movies> WatchLaterMovies { get; private set; }
 
         public User(string name)
         {
-            this.Name = name;
+            Name = name;
+
+
+            LikedMovies = new List<Movies>();
+            DislikedMovies = new List<Movies>();
+            WatchedMovies = new List<Movies>();
+            WatchLaterMovies = new List<Movies>();
         }
 
         public void LikeMovie(Movies movie)
         {
-            liked.Add(movie);
+            LikedMovies.Add(movie);
         }
+
         public void DislikeMovie(Movies movie)
         {
-            disliked.Add(movie);
+            DislikedMovies.Add(movie);
         }
+
         public void AddWatchedMovie(Movies movie)
         {
-            watched.Add(movie);
+            WatchedMovies.Add(movie);
         }
+
         public void AddWatchLaterMovie(Movies movie)
         {
-            watchlater.Add(movie);
+            WatchLaterMovies.Add(movie);
         }
     }
 }
