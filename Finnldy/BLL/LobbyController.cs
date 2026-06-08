@@ -59,18 +59,22 @@ namespace Finnldy.BLL
         }
 
 
-        public ResponseToAPI HandleRequest(GetDataFromAPI Data)
+        public async Task<ResponseToAPI> HandleRequest(GetDataFromAPI Data)
         {
             if(Data.Status == "POST")
             {
                 if(lobby.IsAtive == false)
                 {
-                    bool check = database.IsUserActive(Data.Username);
 
-                    if(check == true)
+
+                    if (await database.IsUserActive(Data.Username))
                     {
-                        User user = database.GetUser(Data.Username);
-                        lobby.AddUser(user);
+                        User? user = await database.GetUser(Data.Username);
+
+                        if (user != null)
+                        {
+                            lobby.AddUser(user);
+                        }
                     }
                     else
                     {
@@ -84,51 +88,35 @@ namespace Finnldy.BLL
             if(Data.Status == "GET")
             {
 
-                if(Data.Action == GetDataFromAPI.action.Liked)
+                User? user = await database.GetUser(Data.Username);
+
+                if(user == null)
                 {
-                    User user = database.GetUser(Data.Username);
-                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
-
-                    user.LikeMovie(movie);
-
-                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
-                    return response;
-                    
+                    return new ResponseToAPI(false, null, null);
                 }
-                if (Data.Action == GetDataFromAPI.action.Disliked)
+                Movies movie = movies.FindMovieById(Data.Movie_id.Value);
+
+
+                switch (Data.Action)
                 {
-                    User user = database.GetUser(Data.Username);
-                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
-
-                    user.DislikeMovie(movie);
-
-                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
-                    return response;
-
+                    case GetDataFromAPI.action.Liked: 
+                        user.LikeMovie(movie); 
+                        break;
+                    case GetDataFromAPI.action.Disliked:
+                        user.DislikeMovie(movie);
+                        break;
+                    case GetDataFromAPI.action.Watchlater:
+                        user.AddWatchLaterMovie(movie);
+                        break;
+                    case GetDataFromAPI.action.AlreadyWatched:
+                        user.AddWatchedMovie(movie);
+                        break;
                 }
-                if (Data.Action == GetDataFromAPI.action.Watchlater)
-                {
-                    User user = database.GetUser(Data.Username);
-                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
 
-                    user.AddWatchLaterMovie(movie);
 
-                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
-                    return response;
+                ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
+                return response;
 
-                }
-                if (Data.Action == GetDataFromAPI.action.AlreadyWatched)
-                {
-                    User user = database.GetUser(Data.Username);
-                    Movies movie = movies.FindMovieById(Data.Movie_id.Value);
-
-                    user.AddWatchedMovie(movie);
-
-                    movies.movies.Remove(movie);
-                    ResponseToAPI response = new ResponseToAPI(true, GetNextMovie(movie), null);
-                    return response;
-
-                }
 
             }
             ResponseToAPI responseend = new ResponseToAPI(false, null, null);
@@ -137,9 +125,9 @@ namespace Finnldy.BLL
 
 
 
-        public void AddUser(string Name)
+        public async void AddUser(string Name)
         {
-            lobby.AddUser(database.GetUser(Name));
+            lobby.AddUser(await database.GetUser(Name));
         }
 
         public void CreateLobby (string Name)
