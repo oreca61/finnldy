@@ -20,5 +20,27 @@ namespace Finnldy.UI
         {
 
         }
+
+        private void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
+        {
+            GenreSelectionWindow genreWindow = new GenreSelectionWindow();
+
+            bool? result = genreWindow.ShowDialog();
+
+            if (result == true)
+            {
+                List<int> unwantedGenreIds = genreWindow.UnwantedGenreIds;
+
+                SwipeView swipeView = new SwipeView(unwantedGenreIds);
+                swipeView.Show();
+
+                this.Close();
+            }
+        }
+
+        private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

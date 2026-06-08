@@ -25,9 +25,13 @@ namespace Finnldy.UI
         private List<Movies> movies;
         private int currentMovieIndex;
 
-        public SwipeView()
+        private List<int> unwantedGenreIds;
+
+        public SwipeView(List<int> unwantedGenreIds)
         {
             InitializeComponent();
+
+            this.unwantedGenreIds = unwantedGenreIds;
 
             currentUser = new User("Mero ist cool");
             swiperContoller = new SwiperContoller();
@@ -39,6 +43,8 @@ namespace Finnldy.UI
         private async void SwipeView_Loaded(object sender, RoutedEventArgs e)
         {
             MovieTitleText.Text = "Filme werden geladen...";
+            MovieReleaseDateText.Text = "";
+            MovieDescriptionText.Text = "";
             MovieCoverImage.Source = null;
 
             await LoadMoviesFromApi();
@@ -54,6 +60,13 @@ namespace Finnldy.UI
 
                 movies = await getMovies.GetPopularMoviesAsync();
 
+                if (unwantedGenreIds != null && unwantedGenreIds.Count > 0)
+                {
+                    movies = movies
+                        .Where(movie => !movie.GenreIds.Any(genreId => unwantedGenreIds.Contains(genreId)))
+                        .ToList();
+                }
+
                 currentMovieIndex = 0;
             }
             catch (Exception ex)
@@ -67,7 +80,9 @@ namespace Finnldy.UI
         {
             if (movies == null || movies.Count == 0)
             {
-                MovieDescriptionText.Text = "Es konnten keine Filme geladen werden.";
+                MovieTitleText.Text = "Keine Filme gefunden";
+                MovieReleaseDateText.Text = "";
+                MovieDescriptionText.Text = "Es konnten keine Filme geladen werden oder alle Filme wurden durch deine Genre-Auswahl herausgefiltert.";
                 MovieCoverImage.Source = null;
 
                 DisableButtons();
@@ -76,16 +91,14 @@ namespace Finnldy.UI
 
             if (currentMovieIndex >= movies.Count)
             {
+                MovieTitleText.Text = "Fertig";
+                MovieReleaseDateText.Text = "";
                 MovieDescriptionText.Text = "Du hast alle Filme geswiped.";
                 MovieCoverImage.Source = null;
 
                 DisableButtons();
                 return;
             }
-
-
-
-
 
             Movies currentMovie = movies[currentMovieIndex];
 
@@ -118,8 +131,7 @@ namespace Finnldy.UI
 
         private Movies GetCurrentMovie()
         {
-         
-            if (currentMovieIndex >= movies.Count)
+            if (movies == null || currentMovieIndex >= movies.Count)
             {
                 return null;
             }
@@ -145,6 +157,11 @@ namespace Finnldy.UI
         {
             Movies currentMovie = GetCurrentMovie();
 
+            if (currentMovie == null)
+            {
+                return;
+            }
+
             Swipe swipe = swiperContoller.DislikeMovie(currentUser, currentMovie);
 
             GoToNextMovie();
@@ -154,7 +171,10 @@ namespace Finnldy.UI
         {
             Movies currentMovie = GetCurrentMovie();
 
- 
+            if (currentMovie == null)
+            {
+                return;
+            }
 
             Swipe swipe = swiperContoller.AddWatchedMovie(currentUser, currentMovie);
 
@@ -165,6 +185,10 @@ namespace Finnldy.UI
         {
             Movies currentMovie = GetCurrentMovie();
 
+            if (currentMovie == null)
+            {
+                return;
+            }
 
             Swipe swipe = swiperContoller.AddWatchLaterMovie(currentUser, currentMovie);
 
@@ -174,6 +198,11 @@ namespace Finnldy.UI
         private void LikeButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
+
+            if (currentMovie == null)
+            {
+                return;
+            }
 
             Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
 

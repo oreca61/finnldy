@@ -7,13 +7,16 @@ namespace Finnldy.BLL
     public class Lobby
     {
         private List<User> Users = new List<User>();
-        public void AddUser(User user) {
-            Users.Add(user);
-        }
+
         public bool IsAtive = false;
 
         public string Lobbycode;
 
-        public string Unwanted;
+        public List<int> UnwantedGenreIds { get; set; } = new List<int>();
+
+        public void AddUser(User user)
+        {
+            Users.Add(user);
+        }
     }
 }

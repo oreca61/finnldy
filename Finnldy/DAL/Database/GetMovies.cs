@@ -40,6 +40,16 @@ namespace Finnldy.DAL
 
                     string releaseDate = movieJson.GetProperty("release_date").GetString();
 
+                    List<int> genreIds = new List<int>();
+
+                    if (movieJson.TryGetProperty("genre_ids", out JsonElement genreArray))
+                    {
+                        foreach (JsonElement genreIdJson in genreArray.EnumerateArray())
+                        {
+                            genreIds.Add(genreIdJson.GetInt32());
+                        }
+                    }
+
                     string posterPath = "";
 
                     if (movieJson.GetProperty("poster_path").ValueKind != JsonValueKind.Null)
@@ -58,7 +68,7 @@ namespace Finnldy.DAL
                         id,
                         title,
                         description,
-                        "",
+                        genreIds,
                         cover,
                         releaseDate
                     );

@@ -52,3 +52,5 @@ C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\refint\Fi
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy.pdb
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy.genruntimeconfig.cache
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\ref\Finnldy.dll
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs

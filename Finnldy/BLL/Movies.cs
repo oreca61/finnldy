@@ -9,24 +9,26 @@ namespace Finnldy.BLL
         public int ApiMovieId { get; set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public string Genre { get; private set; }
+
+        public List<int> GenreIds { get; private set; }
+
         public string Cover { get; private set; }
-        
         public string ReleaseDate { get; set; }
 
-        public Movies(int apiMovieId, string name, string description, string genre, string cover, string releaseDate)
+        public Movies(int apiMovieId, string name, string description, List<int> genreIds, string cover, string releaseDate)
         {
             ApiMovieId = apiMovieId;
             Name = name;
             Description = description;
-            Genre = genre;
+            GenreIds = genreIds;
             Cover = cover;
             ReleaseDate = releaseDate;
         }
-        public Movies(string genre, string name)
+
+        public Movies(string name)
         {
-            this.Genre = genre;
-            this.Name = name;
+            Name = name;
+            GenreIds = new List<int>();
         }
     }
 }

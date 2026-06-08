@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
 
 namespace Finnldy.BLL
 {
@@ -47,22 +48,16 @@ namespace Finnldy.BLL
 
         public void FilterMovies()
         {
-            if(lobby.Unwanted == null)
+            if (lobby.UnwantedGenreIds == null || lobby.UnwantedGenreIds.Count == 0)
             {
                 return;
             }
-            else
-            {
-                foreach(Movies movie in movies.movies)
-                {
-                    if(movie.Genre == lobby.Unwanted)
-                    {
-                        movies.movies.Remove(movie);
-                    }
-                }
-            }
+
+            movies.movies = movies.movies
+                .Where(movie => !movie.GenreIds.Any(genreId => lobby.UnwantedGenreIds.Contains(genreId)))
+                .ToList();
         }
-        
+
 
         public ResponseToAPI HandleRequest(GetDataFromAPI Data)
         {
