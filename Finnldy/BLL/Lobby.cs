@@ -13,5 +13,7 @@ namespace Finnldy.BLL
         public bool IsAtive = false;
 
         public string Lobbycode;
+
+        public string Unwanted;
     }
 }
