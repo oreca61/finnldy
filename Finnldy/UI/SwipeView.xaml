@@ -19,7 +19,6 @@
         <TextBlock Grid.Row="0"
                    Text="Swipe jetzt los"
                    FontSize="32"
-                   FontWeight="Bold"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,20"/>
 
@@ -37,17 +36,14 @@
                 </Border>
 
                 <TextBlock x:Name="MovieTitleText"
-                           Text="Filmtitel"
                            FontSize="24"
-                           FontWeight="Bold"
                            TextWrapping="Wrap"
                            Margin="0,15,0,5"
                            HorizontalAlignment="Center"/>
 
                 <TextBlock x:Name="MovieReleaseDateText"
-                           Text="Erscheinungsdatum"
                            FontSize="14"
-                           Foreground="White"
+                           Foreground="Black"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,10"/>
 
@@ -55,10 +51,10 @@
                               VerticalScrollBarVisibility="Auto">
 
                     <TextBlock x:Name="MovieDescriptionText"
-                               Text="Beschreibung des Films"
                                FontSize="14"
-                               TextWrapping="Wrap"
-                               Foreground="Gray"/>
+                               TextWrapping="Wrap">
+                        
+                    </TextBlock>
                 </ScrollViewer>
 
             </StackPanel>
@@ -109,7 +105,7 @@
 
             <Button x:Name="WatchLaterButton"
                     Grid.Column="3"
-                    Content="🕑&#x0a;Später ansehen"
+                    Content="🕑&#x0a;Später ansehen " 
                     FontSize="18"
                     Height="70"
                     Margin="4"
@@ -118,6 +114,7 @@
                     TextBlock.TextAlignment="Center"
                     Click="WatchLaterButton_Click"/>
 
+            <!-- &#x0a sorgt für Zeilenumbruch -->
         </Grid>
     </Grid>
 </Window>
