@@ -58,7 +58,7 @@ namespace Finnldy.DAL
                         id,
                         title,
                         description,
-                        "Unbekannt",
+                        "",
                         cover,
                         releaseDate
                     );
