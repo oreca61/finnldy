@@ -3,6 +3,7 @@ using Finnldy.DAL.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Finnldy.BLL
@@ -15,6 +16,7 @@ namespace Finnldy.BLL
 
         Lobby lobby = new Lobby();
         MovieReposotory movies = new MovieReposotory();
+        GetMovies GetMovies = new GetMovies();
 
         public void CreateUser(string Name)
         {
@@ -23,13 +25,43 @@ namespace Finnldy.BLL
             // Musst es der Datenbank auch geben
         }
         
-        public void LoadAllMovies()
+        public async void LoadAllMovies()
         {
+            
+            try
+            {
+                GetMovies getMovies = new GetMovies();
+
+                movies.movies = await GetMovies.GetPopularMoviesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Laden der Filme: " + ex.Message);
+            }
             
 
 
         }
 
+
+        public void FilterMovies()
+        {
+            if(lobby.Unwanted == null)
+            {
+                return;
+            }
+            else
+            {
+                foreach(Movies movie in movies.movies)
+                {
+                    if(movie.Genre == lobby.Unwanted)
+                    {
+                        movies.movies.Remove(movie);
+                    }
+                }
+            }
+        }
         
 
         public ResponseToAPI HandleRequest(GetDataFromAPI Data)
