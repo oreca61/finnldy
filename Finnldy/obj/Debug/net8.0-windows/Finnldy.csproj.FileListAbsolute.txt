@@ -54,3 +54,5 @@ C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy.g
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\ref\Finnldy.dll
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs

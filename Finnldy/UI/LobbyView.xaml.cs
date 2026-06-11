@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Finnldy.BLL;
+using Finnldy.DAL.Database;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,8 +18,12 @@ namespace Finnldy.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        
         public MainWindow()
         {
+        
+
 
         }
 

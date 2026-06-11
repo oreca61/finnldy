@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
 Finnldy
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-C:\Users\jakob\source\repos\Finnldy\Finnldy\App.xaml
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\App.xaml
 5-1726634821
 
 25401810001
-198-552479049
+1981124507420
 UI\GenreSelectionWindow.xaml;UI\LobbyView.xaml;UI\Moviecard.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
 
 False
