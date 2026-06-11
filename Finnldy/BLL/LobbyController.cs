@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Finnldy.BLL
 {
@@ -30,37 +31,69 @@ namespace Finnldy.BLL
             lobby.AddUser(user);
             // Musst es der Datenbank auch geben
         }
-        
-        public async void LoadAllMovies()
+
+        public async Task LoadAllMovies()
         {
-            
             try
             {
-                GetMovies getMovies = new GetMovies();
-
                 movies.movies = await GetMovies.GetPopularMoviesAsync();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Fehler beim Laden der Filme: " + ex.Message);
+                movies.movies = new List<Movies>();
             }
-            
-
-
+        
+        
         }
 
 
-        public void FilterMovies()
+        public async Task<List<Movies>> LoadAndFilterMovies( List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
+
         {
-            if (lobby.UnwantedGenreIds == null || lobby.UnwantedGenreIds.Count == 0)
+            try
             {
-                return;
+                movies.movies = await GetMovies.GetPopularMoviesAsync();
+
+                FilterMovies(wantedGenreIds, wantedLanguages, hideAdultMovies);
+
+                return movies.movies;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Laden und Filtern der Filme: " + ex.Message);
+                movies.movies = new List<Movies>();
+                return movies.movies;
+            }
+        }
+
+        public void FilterMovies( List<int> wantedGenreIds, List<string> wantedLanguages,bool hideAdultMovies)
+        {
+            if (wantedGenreIds != null && wantedGenreIds.Count > 0)
+            {
+                movies.movies = movies.movies
+                    .Where(movie => movie.GenreIds.Any(genreId => wantedGenreIds.Contains(genreId)))
+                    .ToList();
             }
 
-            movies.movies = movies.movies
-                .Where(movie => !movie.GenreIds.Any(genreId => lobby.UnwantedGenreIds.Contains(genreId)))
-                .ToList();
+            if (wantedLanguages != null && wantedLanguages.Count > 0)
+            {
+                movies.movies = movies.movies
+                    .Where(movie => wantedLanguages.Contains(movie.OriginalLanguage))
+                    .ToList();
+            }
+
+            if (hideAdultMovies)
+            {
+                movies.movies = movies.movies
+                    .Where(movie => movie.Adult == false)
+                    .ToList();
+            }
+        }
+
+        public List<Movies> GetFilteredMovies()
+        {
+            return movies.movies;
         }
 
 
@@ -148,9 +181,9 @@ namespace Finnldy.BLL
 
         }
 
-        public void StartLobby()
+        public async Task asybStartLobby()
         {
-            LoadAllMovies();
+            await LoadAllMovies();
         }
 
 

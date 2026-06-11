@@ -1,4 +1,6 @@
-﻿namespace Finnldy.DAL
+﻿using Finnldy.DAL.Database;
+
+namespace Finnldy.DAL
 {
     public static class NetworkSession
     {

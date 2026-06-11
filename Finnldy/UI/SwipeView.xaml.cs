@@ -42,6 +42,7 @@ namespace Finnldy.UI
             this.hideAdultMovies = hideAdultMovies;
 
             swiperContoller = new SwiperContoller();
+            lobbyController = new LobbyController();
 
             movies = new List<Movies>();
             currentMovieIndex = 0;

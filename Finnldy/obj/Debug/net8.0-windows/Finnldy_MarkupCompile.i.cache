@@ -4,7 +4,7 @@
 winexe
 C#
 .cs
-C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
 Finnldy
 none
 false
@@ -12,7 +12,7 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 C:\Users\jakob\source\repos\Finnldy\Finnldy\App.xaml
 6-1300716127
 
-28-1412210087
+30501747659
 198-552479049
 UI\GenreSelectionWindow.xaml;UI\HomeView.xaml;UI\JoinLobbyWindow.xaml;UI\LobbyView.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
 
