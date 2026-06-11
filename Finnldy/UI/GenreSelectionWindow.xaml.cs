@@ -19,7 +19,9 @@ namespace Finnldy.UI
     /// </summary>
     public partial class GenreSelectionWindow : Window
     {
-        public List<int> UnwantedGenreIds { get; private set; } = new List<int>();
+        public List<int> WantedGenreIds { get; private set; } = new List<int>();
+        public List<string> WantedLanguages { get; private set; } = new List<string>();
+        public bool HideAdultMovies { get; private set; }
 
         public GenreSelectionWindow()
         {
@@ -28,7 +30,8 @@ namespace Finnldy.UI
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            UnwantedGenreIds.Clear();
+            WantedGenreIds.Clear();
+            WantedLanguages.Clear();
 
             AddGenreIfChecked(ActionCheckBox);
             AddGenreIfChecked(AdventureCheckBox);
@@ -40,11 +43,24 @@ namespace Finnldy.UI
             AddGenreIfChecked(FamilyCheckBox);
             AddGenreIfChecked(FantasyCheckBox);
             AddGenreIfChecked(HorrorCheckBox);
+            AddGenreIfChecked(MusicCheckBox);
+            AddGenreIfChecked(MysteryCheckBox);
             AddGenreIfChecked(RomanceCheckBox);
-            AddGenreIfChecked(SciFiCheckBox);
+            AddGenreIfChecked(ScienceFictionCheckBox);
+            AddGenreIfChecked(TvMovieCheckBox);
             AddGenreIfChecked(ThrillerCheckBox);
             AddGenreIfChecked(WarCheckBox);
             AddGenreIfChecked(WesternCheckBox);
+
+            AddLanguageIfChecked(GermanLanguageCheckBox);
+            AddLanguageIfChecked(EnglishLanguageCheckBox);
+            AddLanguageIfChecked(HindiLanguageCheckBox);
+            AddLanguageIfChecked(JapaneseLanguageCheckBox);
+            AddLanguageIfChecked(KoreanLanguageCheckBox);
+            AddLanguageIfChecked(FrenchLanguageCheckBox);
+            AddLanguageIfChecked(SpanishLanguageCheckBox);
+
+            HideAdultMovies = HideAdultMoviesCheckBox.IsChecked == true;
 
             DialogResult = true;
             Close();
@@ -55,7 +71,16 @@ namespace Finnldy.UI
             if (checkBox.IsChecked == true)
             {
                 int genreId = int.Parse(checkBox.Tag.ToString());
-                UnwantedGenreIds.Add(genreId);
+                WantedGenreIds.Add(genreId);
+            }
+        }
+
+        private void AddLanguageIfChecked(CheckBox checkBox)
+        {
+            if (checkBox.IsChecked == true)
+            {
+                string language = checkBox.Tag.ToString();
+                WantedLanguages.Add(language);
             }
         }
     }

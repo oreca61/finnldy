@@ -19,6 +19,9 @@ namespace Finnldy.DAL
 
             using HttpClient client = new HttpClient();
 
+
+            // Habe ich mit Ki Hilfe gemacht 
+
             for (int page = 1; page <= 100; page++)
             {
                 string url = $"https://api.themoviedb.org/3/movie/popular?api_key={apiKey}&language=de-DE&page={page}";
@@ -34,13 +37,27 @@ namespace Finnldy.DAL
                 {
                     int id = movieJson.GetProperty("id").GetInt32();
 
+
                     string title = movieJson.GetProperty("title").GetString();
 
                     string description = movieJson.GetProperty("overview").GetString();
 
+
                     string releaseDate = movieJson.GetProperty("release_date").GetString();
 
+                    string originalLanguage = movieJson.GetProperty("original_language").GetString();
+
+                    bool adult = movieJson.GetProperty("adult").GetBoolean();
+
+                    double voteAverage = movieJson.GetProperty("vote_average").GetDouble();
+                    
+                    int voteCount = movieJson.GetProperty("vote_count").GetInt32();
+                  
+
                     List<int> genreIds = new List<int>();
+
+
+
 
                     if (movieJson.TryGetProperty("genre_ids", out JsonElement genreArray))
                     {
@@ -64,14 +81,18 @@ namespace Finnldy.DAL
                         cover = "https://image.tmdb.org/t/p/w500" + posterPath;
                     }
 
+
+
+
                     Movies movie = new Movies(
-                        id,
-                        title,
-                        description,
-                        genreIds,
-                        cover,
-                        releaseDate
-                    );
+                     id, title,
+                     description,
+                     genreIds,
+                     cover,
+                     releaseDate,
+                     originalLanguage,
+                     adult,
+                     voteAverage);
 
                     movies.Add(movie);
                 }

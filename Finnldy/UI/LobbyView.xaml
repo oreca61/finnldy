@@ -1,30 +1,185 @@
-﻿<Window x:Class="Finnldy.UI.MainWindow"
+﻿<Window x:Class="Finnldy.UI.LobbyView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Finnldy.UI"
-        mc:Ignorable="d"
-        Title="Finnldy Lobby" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        Title="Lobby erstellt"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="#111827">
 
-        <TextBlock
-            Grid.Row="0"
-            Text=" Finnldy Lobby"
-            FontSize="32"
-            FontWeight="Bold"
-            HorizontalAlignment="Center"
-            Margin="0,0,0,20">
-        </TextBlock>
-        
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <Button Content="Host a Lobby" Width="200" Height="50" Margin="0,0,0,10" Click="CreateLobbyButton_Click"/>
-            <Button Content="Join a Lobby" Width="200" Height="50" Margin="0,0,0,10" Click="JoinLobbyButton_Click"/>
-        </StackPanel>
+    <Window.Resources>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#E11D48"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="68"/>
+            <Setter Property="MinWidth" Value="420"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="18">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#374151"/>
+        </Style>
+
+        <Style x:Key="CloseButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#374151"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="25">
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#111827" Offset="0"/>
+                <GradientStop Color="#1F2937" Offset="0.45"/>
+                <GradientStop Color="#0F172A" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Schließen Button -->
+        <Button Content="✕"
+                Style="{StaticResource CloseButton}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="CloseButton_Click"/>
+
+        <Grid Margin="0,30,0,0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,35">
+
+                <TextBlock Text="Lobby erstellt"
+                           Foreground="White"
+                           FontSize="50"
+                           FontWeight="Black"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Teile diesen Code mit deinen Freunden, damit sie der Lobby beitreten können."
+                           Foreground="#9CA3AF"
+                           FontSize="17"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Width="650"
+                           Margin="0,8,0,0"/>
+
+            </StackPanel>
+
+            <!-- Lobby Card -->
+            <Border Grid.Row="1"
+                    Width="650"
+                    Height="520"
+                    Background="#1F2937"
+                    CornerRadius="28"
+                    Padding="35"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    BorderBrush="#374151"
+                    BorderThickness="1">
+
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="28"
+                                      ShadowDepth="0"
+                                      Opacity="0.4"/>
+                </Border.Effect>
+
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="Dein Lobby-Code"
+                               Foreground="#9CA3AF"
+                               FontSize="18"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,12"/>
+
+                    <!-- Lobby Code Platzhalter -->
+                    <Border Background="#111827"
+                            CornerRadius="22"
+                            Padding="40,25"
+                            Margin="0,0,0,35"
+                            MinWidth="520"
+                            MinHeight="130"
+                            BorderBrush="#374151"
+                            BorderThickness="1">
+
+                        <TextBlock x:Name="LobbyCodeText"
+                                   Text="Mero der Große"
+                                   Foreground="#E11D48"
+                                   FontSize="42"
+                                   FontWeight="Black"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <TextBlock Text="Warte, bis alle Teilnehmer beigetreten sind."
+                               Foreground="#D1D5DB"
+                               FontSize="16"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Width="500"
+                               Margin="0,0,0,25"/>
+
+                    <Button Content="Swipen starten"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="StartSwipeButton_Click"/>
+
+                    <Button Content="Zurück zum Home"
+                            Style="{StaticResource SecondaryButton}"
+                            Click="HomeButton_Click"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
     </Grid>
 </Window>
