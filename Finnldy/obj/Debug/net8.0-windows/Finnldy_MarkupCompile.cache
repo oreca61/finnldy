@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\App.xaml
-5-1726634821
+7397820791
 
-25401810001
+29120139907
 1981124507420
-UI\GenreSelectionWindow.xaml;UI\LobbyView.xaml;UI\Moviecard.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
+UI\GenreSelectionWindow.xaml;UI\HomeView.xaml;UI\JoinLobbyWindow.xaml;UI\LobbyView.xaml;UI\Moviecard.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
 
 False
 

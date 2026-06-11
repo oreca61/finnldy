@@ -1,0 +1,124 @@
+﻿<Window x:Class="Finnldy.UI.JoinLobbyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Lobby beitreten"
+        Height="460"
+        Width="560"
+        WindowStartupLocation="CenterScreen"
+        Background="#111827">
+
+    <Window.Resources>
+
+        <!-- Design wieder Ki generiert promt: gleiches design wie bei HomeView verwenden -->
+        
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#E11D48"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="56"/>
+            <Setter Property="MinWidth" Value="280"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="18">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#374151"/>
+        </Style>
+
+        <Style x:Key="CloseButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#374151"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="25">
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#111827" Offset="0"/>
+                <GradientStop Color="#1F2937" Offset="0.45"/>
+                <GradientStop Color="#0F172A" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Button Content="✕"
+                Style="{StaticResource CloseButton}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="CloseButton_Click"/>
+
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+            <TextBlock Text="Lobby beitreten"
+                       Foreground="White"
+                       FontSize="38"
+                       FontWeight="Black"
+                       HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Gib den Lobby-Code ein, den du erhalten hast."
+                       Foreground="#9CA3AF"
+                       FontSize="15"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       Width="400"
+                       Margin="0,8,0,28"/>
+
+            <TextBox x:Name="LobbyCodeTextBox"
+                     Width="320"
+                     Height="54"
+                     FontSize="22"
+                     FontWeight="Bold"
+                     Padding="14,0"
+                     VerticalContentAlignment="Center"
+                     TextAlignment="Center"
+                     Background="#111827"
+                     Foreground="White"
+                     BorderBrush="#374151"
+                     BorderThickness="1"
+                     Margin="0,0,0,22"/>
+
+            <Button Content="Beitreten"
+                    Style="{StaticResource PrimaryButton}"
+                    Click="JoinButton_Click"/>
+
+            <Button Content="Zurück zum Home"
+                    Style="{StaticResource SecondaryButton}"
+                    Click="HomeButton_Click"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

@@ -1,5 +1,4 @@
 ﻿using Finnldy.BLL;
-using Finnldy.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,42 +16,40 @@ using System.Windows.Shapes;
 namespace Finnldy.UI
 {
     /// <summary>
-    /// Interaction logic for LobbyView.xaml
+    /// Interaction logic for JoinLobbyWindow.xaml
     /// </summary>
-    public partial class LobbyView : Window
+    public partial class JoinLobbyWindow : Window
     {
         private User currentUser;
 
-        private List<int> wantedGenreIds;
-        private List<string> wantedLanguages;
-        private bool hideAdultMovies;
-
-
-
-        public LobbyView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
+        public JoinLobbyWindow(User user)
         {
             InitializeComponent();
 
             currentUser = user;
-
-            this.wantedGenreIds = wantedGenreIds;
-            this.wantedLanguages = wantedLanguages;
-            this.hideAdultMovies = hideAdultMovies;
         }
 
-        private void StartSwipeButton_Click(object sender, RoutedEventArgs e)
+        private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
+            string code = LobbyCodeTextBox.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                MessageBox.Show("Bitte gib einen Lobby-Code ein.");
+                return;
+            }
+
             SwipeView swipeView = new SwipeView(
                 currentUser,
-                wantedGenreIds,
-                wantedLanguages,
-                hideAdultMovies
+                new List<int>(),
+                new List<string>(),
+                true
             );
-
-
 
             swipeView.Show();
             this.Close();
+
+
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
@@ -65,7 +62,7 @@ namespace Finnldy.UI
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
     }
 }

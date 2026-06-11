@@ -25,15 +25,21 @@ namespace Finnldy.UI
         private List<Movies> movies;
         private int currentMovieIndex;
 
-        private List<int> unwantedGenreIds;
+        private List<int> wantedGenreIds;
+        private List<string> wantedLanguages;
+        private bool hideAdultMovies;
 
-        public SwipeView(List<int> unwantedGenreIds)
+
+        public SwipeView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
         {
             InitializeComponent();
 
-            this.unwantedGenreIds = unwantedGenreIds;
+            currentUser = user;
 
-            currentUser = new User("Mero ist cool");
+            this.wantedGenreIds = wantedGenreIds;
+            this.wantedLanguages = wantedLanguages;
+            this.hideAdultMovies = hideAdultMovies;
+
             swiperContoller = new SwiperContoller();
 
             movies = new List<Movies>();
@@ -60,10 +66,24 @@ namespace Finnldy.UI
 
                 movies = await getMovies.GetPopularMoviesAsync();
 
-                if (unwantedGenreIds != null && unwantedGenreIds.Count > 0)
+                if (wantedGenreIds != null && wantedGenreIds.Count > 0)
                 {
                     movies = movies
-                        .Where(movie => !movie.GenreIds.Any(genreId => unwantedGenreIds.Contains(genreId)))
+                        .Where(movie => movie.GenreIds.Any(genreId => wantedGenreIds.Contains(genreId)))
+                        .ToList();
+                }
+
+                if (wantedLanguages != null && wantedLanguages.Count > 0)
+                {
+                    movies = movies
+                        .Where(movie => wantedLanguages.Contains(movie.OriginalLanguage))
+                        .ToList();
+                }
+
+                if (hideAdultMovies)
+                {
+                    movies = movies
+                        .Where(movie => movie.Adult == false)
                         .ToList();
                 }
 
@@ -102,9 +122,23 @@ namespace Finnldy.UI
 
             Movies currentMovie = movies[currentMovieIndex];
 
+
             MovieTitleText.Text = currentMovie.Name;
-            MovieReleaseDateText.Text = currentMovie.ReleaseDate;
+            MovieReleaseDateText.Text = "📅 " + currentMovie.ReleaseDate;
             MovieDescriptionText.Text = currentMovie.Description;
+
+            MovieRatingText.Text = "⭐ " + currentMovie.VoteAverage.ToString("0.0") + " / 10";
+            MovieLanguageText.Text = "🌍 " + currentMovie.OriginalLanguage.ToUpper();
+
+            if (currentMovie.Adult)
+            {
+                MovieAdultText.Text = "🔞 18+";
+            }
+            else
+            {
+                MovieAdultText.Text = "👨‍👩‍👧 Nicht 18+";
+            }
+
 
             try
             {
@@ -207,6 +241,11 @@ namespace Finnldy.UI
             Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
 
             GoToNextMovie();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

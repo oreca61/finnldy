@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Finnldy.BLL;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Finnldy.DAL
 
         public event Action<NetworkPacket>? PacketReceived;
         public event Action<string>? StatusChanged;
+
+        public LobbyController Lobby;
 
         public async Task StartAsync(int port = 5000)
         {
@@ -77,9 +80,11 @@ namespace Finnldy.DAL
                         continue;
                     }
 
-                    PacketReceived?.Invoke(packet);
+                    GetDataFromAPI Data = Convert(packet);
 
-                    await SendToAllExceptAsync(packet, client);
+                    await Lobby.HandleRequest(Data);
+
+
                 }
             }
             catch
@@ -206,6 +211,48 @@ namespace Finnldy.DAL
             }
 
             return "127.0.0.1";
+        }
+
+        public static GetDataFromAPI? Convert(NetworkPacket packet)
+        {
+            if (packet == null)
+            {
+                return null;
+            }
+
+            GetDataFromAPI.action? action = ConvertSwipeType(packet.SwipeType);
+
+            if (action == null)
+            {
+                return null;
+            }
+
+            return new GetDataFromAPI(
+                "GET",
+                packet.MovieId,
+                packet.Username,
+                action
+            );
+        }
+        private static GetDataFromAPI.action? ConvertSwipeType(SwipeType swipeType)
+        {
+            switch (swipeType)
+            {
+                case SwipeType.Like:
+                    return GetDataFromAPI.action.Liked;
+
+                case SwipeType.Dislike:
+                    return GetDataFromAPI.action.Disliked;
+
+                case SwipeType.WatchLater:
+                    return GetDataFromAPI.action.Watchlater;
+
+                case SwipeType.Watched:
+                    return GetDataFromAPI.action.AlreadyWatched;
+
+                default:
+                    return null;
+            }
         }
     }
 }

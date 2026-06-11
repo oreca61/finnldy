@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Finnldy.BLL
+﻿namespace Finnldy.BLL
 {
     public class GetDataFromAPI
     {
-        public string Status;
-        public int? Movie_id;
-        public string Username;
-        public action? Action;
+        public string Status { get; set; } = "";
+        public int? Movie_id { get; set; }
+        public string Username { get; set; } = "";
+        public action? Action { get; set; }
 
         public enum action
         {
@@ -21,12 +15,16 @@ namespace Finnldy.BLL
             AlreadyWatched
         }
 
-        public GetDataFromAPI(string Status, int? Movie_id, string Username, action? Action)
+        public GetDataFromAPI()
         {
-            Status = this.Status;
-            Movie_id = this.Movie_id;
-            Username = this.Username;
-            Action = this.Action;
+        }
+
+        public GetDataFromAPI(string status, int? movieId, string username, action? action)
+        {
+            Status = status;
+            Movie_id = movieId;
+            Username = username;
+            Action = action;
         }
     }
 }

@@ -5,7 +5,6 @@ C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.cache
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.lref
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\Moviecard.baml
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\Moviecard.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\ResultView.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\SwipeView.g.cs
@@ -17,7 +16,6 @@ C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.dep
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.runtimeconfig.json
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.dll
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.pdb
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\ResultView.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\SwipeView.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy.g.resources
@@ -54,5 +52,15 @@ C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy.g
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\ref\Finnldy.dll
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.baml
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.baml
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.g.cs
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.baml
+C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.g.cs
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.baml
 C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.g.cs

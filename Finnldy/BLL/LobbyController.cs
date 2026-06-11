@@ -11,13 +11,18 @@ namespace Finnldy.BLL
 {
     public class LobbyController
     {
-        HostNetworkService networkService = new HostNetworkService();
+
 
         Database database = new Database();
 
         Lobby lobby = new Lobby();
         MovieReposotory movies = new MovieReposotory();
         GetMovies GetMovies = new GetMovies();
+
+        public event Action<NetworkPacket>? NetworkPacketReceived;
+        public event Action<string>? NetworkStatusChanged;
+
+        private bool networkEventsRegistered = false;
 
         public void CreateUser(string Name)
         {
