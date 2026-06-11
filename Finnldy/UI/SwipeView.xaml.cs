@@ -21,6 +21,7 @@ namespace Finnldy.UI
     {
         private User currentUser;
         private SwiperContoller swiperContoller;
+        private LobbyController lobbyController;
 
         private List<Movies> movies;
         private int currentMovieIndex;
@@ -62,30 +63,11 @@ namespace Finnldy.UI
         {
             try
             {
-                GetMovies getMovies = new GetMovies();
-
-                movies = await getMovies.GetPopularMoviesAsync();
-
-                if (wantedGenreIds != null && wantedGenreIds.Count > 0)
-                {
-                    movies = movies
-                        .Where(movie => movie.GenreIds.Any(genreId => wantedGenreIds.Contains(genreId)))
-                        .ToList();
-                }
-
-                if (wantedLanguages != null && wantedLanguages.Count > 0)
-                {
-                    movies = movies
-                        .Where(movie => wantedLanguages.Contains(movie.OriginalLanguage))
-                        .ToList();
-                }
-
-                if (hideAdultMovies)
-                {
-                    movies = movies
-                        .Where(movie => movie.Adult == false)
-                        .ToList();
-                }
+                movies = await lobbyController.LoadAndFilterMovies(
+                    wantedGenreIds,
+                    wantedLanguages,
+                    hideAdultMovies
+                );
 
                 currentMovieIndex = 0;
             }

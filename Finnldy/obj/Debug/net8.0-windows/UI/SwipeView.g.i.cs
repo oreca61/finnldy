@@ -140,7 +140,7 @@ namespace Finnldy.UI {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Finnldy;component/ui/swipeview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Finnldy;V1.0.0.0;component/ui/swipeview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\UI\SwipeView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
