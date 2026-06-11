@@ -1,4 +1,5 @@
 ﻿using Finnldy.BLL;
+using Finnldy.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace Finnldy.UI
         private List<string> wantedLanguages;
         private bool hideAdultMovies;
 
+
+
         public LobbyView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
         {
             InitializeComponent();
@@ -45,6 +48,8 @@ namespace Finnldy.UI
                 wantedLanguages,
                 hideAdultMovies
             );
+
+
 
             swipeView.Show();
             this.Close();

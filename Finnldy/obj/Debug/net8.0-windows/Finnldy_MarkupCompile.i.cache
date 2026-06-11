@@ -4,7 +4,7 @@
 winexe
 C#
 .cs
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\
 Finnldy
 none
 false
@@ -16,5 +16,5 @@ C:\Users\jakob\source\repos\Finnldy\Finnldy\App.xaml
 198-552479049
 UI\GenreSelectionWindow.xaml;UI\HomeView.xaml;UI\JoinLobbyWindow.xaml;UI\LobbyView.xaml;UI\ResultView.xaml;UI\SwipeView.xaml;
 
-False
+True
 

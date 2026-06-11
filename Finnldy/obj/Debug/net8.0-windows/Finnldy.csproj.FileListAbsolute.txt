@@ -58,3 +58,9 @@ C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyVie
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\LobbyView.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.baml
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.baml
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\GenreSelectionWindow.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\HomeView.g.cs
+C:\Users\Zenbook\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\JoinLobbyWindow.g.cs
