@@ -22,6 +22,8 @@ namespace Finnldy.UI
         private User currentUser;
         private SwiperContoller swiperContoller;
         private LobbyController lobbyController;
+        private ISwipeApiService fastApiService;
+
 
         private List<Movies> movies;
         private int currentMovieIndex;
@@ -31,7 +33,10 @@ namespace Finnldy.UI
         private bool hideAdultMovies;
 
 
-        public SwipeView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
+        private int maxSwipes;
+        private int swipeCounter;
+
+        public SwipeView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies, int maxSwipes = 50)
         {
             InitializeComponent();
 
@@ -40,13 +45,20 @@ namespace Finnldy.UI
             this.wantedGenreIds = wantedGenreIds;
             this.wantedLanguages = wantedLanguages;
             this.hideAdultMovies = hideAdultMovies;
+            this.maxSwipes = maxSwipes;
+            
+            
+            swipeCounter = 0;
 
             swiperContoller = new SwiperContoller();
-            lobbyController = new LobbyController();
+
+            fastApiService = new FastApiService();
+
+            lobbyController = NetworkSession.LobbyController;
 
             movies = new List<Movies>();
-            currentMovieIndex = 0;
 
+            currentMovieIndex = 0;
 
             NetworkSession.LobbyController.NetworkPacketReceived += OnNetworkPacketReceived;
         }
@@ -222,7 +234,37 @@ namespace Finnldy.UI
             WatchLaterButton.IsEnabled = false;
         }
 
-        private async void  DislikeButton_Click(object sender, RoutedEventArgs e)
+
+
+
+
+
+
+
+        private async void LikeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Movies currentMovie = GetCurrentMovie();
+
+            if (currentMovie == null)
+            {
+                AppLogger.Error("Like geklickt, aber currentMovie war null.");
+                return;
+            }
+
+            AppLogger.Info(currentUser.Name + " liked Film: " + currentMovie.Name);
+
+            Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
+
+            SaveSwipeInBackground(currentMovie, SwipeType.Like);
+
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Like);
+
+            FinishSwipeAndCheckResult(currentMovie, SwipeType.Like);
+        }
+
+
+
+        private async void DislikeButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
 
@@ -233,12 +275,16 @@ namespace Finnldy.UI
 
             Swipe swipe = swiperContoller.DislikeMovie(currentUser, currentMovie);
 
-            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Like);
+            SaveSwipeInBackground(currentMovie, SwipeType.Dislike);
 
-            GoToNextMovie();
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Dislike);
+
+            FinishSwipeAndCheckResult(currentMovie, SwipeType.Dislike);
         }
 
-        private void WatchedButton_Click(object sender, RoutedEventArgs e)
+
+
+        private async void WatchedButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
 
@@ -249,8 +295,14 @@ namespace Finnldy.UI
 
             Swipe swipe = swiperContoller.AddWatchedMovie(currentUser, currentMovie);
 
-            GoToNextMovie();
+            SaveSwipeInBackground(currentMovie, SwipeType.Watched);
+
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Watched);
+
+            FinishSwipeAndCheckResult(currentMovie, SwipeType.Watched);
         }
+
+
 
         private async void WatchLaterButton_Click(object sender, RoutedEventArgs e)
         {
@@ -263,28 +315,56 @@ namespace Finnldy.UI
 
             Swipe swipe = swiperContoller.AddWatchLaterMovie(currentUser, currentMovie);
 
+            SaveSwipeInBackground(currentMovie, SwipeType.WatchLater);
+
             await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.WatchLater);
 
-            GoToNextMovie();
+            FinishSwipeAndCheckResult(currentMovie, SwipeType.WatchLater);
         }
-        private async void LikeButton_Click(object sender, RoutedEventArgs e)
-        {
-            Movies currentMovie = GetCurrentMovie();
 
-            if (currentMovie == null)
-            {
-                return;
-            }
 
-            Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
 
-            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Like);
 
-            GoToNextMovie();
-        }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        // Ki Hilfe
+        // mach mir eine Methode um nach jedem Swipe zu überprüfen ob das Ergebnis angezeigt werden soll oder zum nächsten Film gegangen wird
+
+        private void FinishSwipeAndCheckResult(Movies movie, SwipeType swipeType)
+        {
+            NetworkSession.LobbyController.AddSwipeToResult(movie, swipeType, currentUser.Name);
+
+            swipeCounter++;
+
+            AppLogger.Info("Swipe " + swipeCounter + " von " + maxSwipes + ": "
+                           + currentUser.Name + " -> " + swipeType + " -> " + movie.Name);
+
+            if (swipeCounter >= maxSwipes)
+            {
+                DisableButtons();
+
+                AppLogger.Info("Maximale Swipe-Anzahl erreicht. Ergebnis wird angezeigt.");
+
+                List<Result> results = NetworkSession.LobbyController.GetFinalResults();
+
+                ResultView resultView = new ResultView(results);
+                resultView.Show();
+
+                this.Close();
+                return;
+            }
+
+            GoToNextMovie();
+        }
+
+        // Chatgbt Hilfsmethode um den Swipe im Hintergrund zu speichern damit die UI schneller reagiert
+
+        private async void SaveSwipeInBackground(Movies movie, SwipeType swipeType)
+        {
+            await fastApiService.SaveSwipeAsync(currentUser, movie, swipeType);
         }
     }
 }

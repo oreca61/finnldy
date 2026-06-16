@@ -20,6 +20,7 @@ namespace Finnldy.BLL
         MovieReposotory movies = new MovieReposotory();
         GetMovies GetMovies = new GetMovies();
 
+        private ResultController resultController = new ResultController();
         public event Action<NetworkPacket>? NetworkPacketReceived;
         public event Action<string>? NetworkStatusChanged;
 
@@ -70,6 +71,12 @@ namespace Finnldy.BLL
                 movies.movies = new List<Movies>();
                 return movies.movies;
             }
+        }
+
+
+        public void Moviesfüllen(List<Movies> movieList)
+        {
+            movies.movies = movieList;
         }
 
         public void FilterMovies( List<int> wantedGenreIds, List<string> wantedLanguages,bool hideAdultMovies)
@@ -227,7 +234,7 @@ namespace Finnldy.BLL
 
         // KI Anfang
         // Chat
-        // kannst du mir diese Methode verbessern?
+        // kannst du mir diese Methode verbessern
 
 
         private async Task ProcessNetworkPacket(NetworkPacket packet)
@@ -249,10 +256,14 @@ namespace Finnldy.BLL
                 return;
             }
 
-            if (packet.SwipeType == SwipeType.Watched)
+            Movies movieForResult = movies.FindMovieById(packet.MovieId);
+
+            if (movieForResult != null)
             {
-                return;
+                AddSwipeToResult(movieForResult, packet.SwipeType, packet.Username);
             }
+
+
 
             GetDataFromAPI? data = ConvertPacketToGetDataFromAPI(packet);
 
@@ -283,6 +294,9 @@ namespace Finnldy.BLL
 
             NetworkPacketReceived?.Invoke(packet);
         }
+        // Ki Ende
+        // Chat
+        // bitte hilf mir empfangene NetworkPackets im LobbyController zu unterscheiden
 
         public void RegisterNetworkEvents()
         {
@@ -361,5 +375,88 @@ namespace Finnldy.BLL
 
             return null; 
         }
+
+        public void AddSwipeToResult(Movies movie, SwipeType swipeType, string username)
+        {
+            resultController.AddSwipeToResult(movie, swipeType, username);
+        }
+
+        public List<Result> GetFinalResults()
+        {
+            return resultController.GetBestResults();
+        }
+
+
+
+        // KI
+        // ChatGPT
+        // prompt: schreibe eine Methode die einen Swipe als NetworkPacket erstellt 
+
+        public async Task SendSwipeOverNetwork(Movies movie, SwipeType swipeType)
+        {
+            if (movie == null)
+            {
+                AppLogger.Error("SendSwipeOverNetwork: movie war null.");
+                return;
+            }
+
+            NetworkPacket packet = new NetworkPacket
+            {
+                Type = "swipe",
+                Username = NetworkSession.Username,
+                MovieId = movie.ApiMovieId,
+                MovieTitle = movie.Name,
+                SwipeType = swipeType,
+                Time = DateTime.Now
+            };
+
+            if (NetworkSession.IsHost)
+            {
+                AppLogger.Info("Host sendet Swipe an alle: " + movie.Name + " / " + swipeType);
+                await NetworkSession.Host.SendToAllAsync(packet);
+            }
+            else if (NetworkSession.IsClient)
+            {
+                AppLogger.Info("Client sendet Swipe an Host: " + movie.Name + " / " + swipeType);
+                await NetworkSession.Client.SendAsync(packet);
+            }
+        }
+
+
+        // Ki Ende
+
+        private async Task CheckForMatch(NetworkPacket packet)
+        {
+            if (packet == null)
+            {
+                return;
+            }
+
+            if (!likedUsersByMovie.ContainsKey(packet.MovieId))
+            {
+                likedUsersByMovie[packet.MovieId] = new HashSet<string>();
+            }
+
+            likedUsersByMovie[packet.MovieId].Add(packet.Username);
+
+            if (likedUsersByMovie[packet.MovieId].Count >= 2)
+            {
+                NetworkPacket matchPacket = new NetworkPacket
+                {
+                    Type = "match",
+                    Username = packet.Username,
+                    MovieId = packet.MovieId,
+                    MovieTitle = packet.MovieTitle,
+                    SwipeType = packet.SwipeType,
+                    MatchFound = true,
+                    Time = DateTime.Now
+                };
+
+                await NetworkSession.Host.SendToAllAsync(matchPacket);
+
+                NetworkPacketReceived?.Invoke(matchPacket);
+            }
+        }
+
     }
 }

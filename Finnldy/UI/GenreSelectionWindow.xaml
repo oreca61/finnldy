@@ -219,6 +219,31 @@
                               Content="Erwachsenenfilme ausblenden"
                               IsChecked="True"/>
 
+
+                    <TextBlock Text="Swipe-Anzahl"
+                               Foreground="White"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="0,25,0,10"/>
+
+                    <TextBlock Text="Nach dieser Anzahl an Swipes wird automatisch das Ergebnis angezeigt."
+                               Foreground="#9CA3AF"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,8"/>       
+
+                    <TextBox x:Name="MaxSwipesTextBox"
+                             Text="10"
+                             Height="42"
+                             FontSize="16"
+                             Padding="12,0"
+                             Background="#111827"
+                             Foreground="White"
+                             BorderBrush="#374151"
+                             BorderThickness="1"/>
+
+
+
                 </StackPanel>
 
             </ScrollViewer>

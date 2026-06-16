@@ -46,13 +46,17 @@ namespace Finnldy.UI
 
             bool? result = genreWindow.ShowDialog();
 
+            int maxSwipes = genreWindow.MaxSwipes;
+
             if (result == true)
             {
                 LobbyView lobbyView = new LobbyView(
                     currentUser,
                     genreWindow.WantedGenreIds,
                     genreWindow.WantedLanguages,
-                    genreWindow.HideAdultMovies
+                    genreWindow.HideAdultMovies,
+                    genreWindow.MaxSwipes
+
                 );
 
                 lobbyView.Show();

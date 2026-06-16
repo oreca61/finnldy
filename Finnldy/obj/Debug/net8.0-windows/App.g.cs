@@ -44,7 +44,7 @@ namespace Finnldy {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.8.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.9.0")]
         public void InitializeComponent() {
             
             #line 4 "..\..\..\App.xaml"
@@ -59,7 +59,7 @@ namespace Finnldy {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.8.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.9.0")]
         public static void Main() {
             Finnldy.App app = new Finnldy.App();
             app.InitializeComponent();

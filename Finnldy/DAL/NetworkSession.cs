@@ -1,4 +1,5 @@
-﻿using Finnldy.DAL.Database;
+﻿using Finnldy.BLL;
+using Finnldy.DAL.Database;
 
 namespace Finnldy.DAL
 {

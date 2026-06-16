@@ -26,11 +26,12 @@ namespace Finnldy.UI
         private List<int> wantedGenreIds;
         private List<string> wantedLanguages;
         private bool hideAdultMovies;
+        private int maxSwipes;
 
 
 
 
-        public LobbyView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
+        public LobbyView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies, int maxSwipes)
         {
             InitializeComponent();
 
@@ -39,6 +40,7 @@ namespace Finnldy.UI
             this.wantedGenreIds = wantedGenreIds;
             this.wantedLanguages = wantedLanguages;
             this.hideAdultMovies = hideAdultMovies;
+            this.maxSwipes = maxSwipes;
 
             StartHost();
         }
@@ -85,8 +87,9 @@ namespace Finnldy.UI
                 currentUser,
                 wantedGenreIds,
                 wantedLanguages,
-                hideAdultMovies
-            );
+                hideAdultMovies,
+                maxSwipes
+                );
 
 
 

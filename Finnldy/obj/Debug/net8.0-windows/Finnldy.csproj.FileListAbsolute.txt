@@ -8,7 +8,6 @@ C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\ResultVi
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\UI\SwipeView.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.cache
-C:\Users\jakob\source\repos\Finnldy\Finnldy\obj\Debug\net8.0-windows\Finnldy_MarkupCompile.lref
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.exe
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.deps.json
 C:\Users\jakob\source\repos\Finnldy\Finnldy\bin\Debug\net8.0-windows\Finnldy.runtimeconfig.json
