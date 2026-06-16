@@ -1,4 +1,5 @@
 ﻿using Finnldy.BLL;
+using Finnldy.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Finnldy.UI
     public partial class JoinLobbyWindow : Window
     {
         private User currentUser;
+        public ClientNetworkService ClientNetworkService = new ClientNetworkService();
 
         public JoinLobbyWindow(User user)
         {
@@ -29,7 +31,7 @@ namespace Finnldy.UI
             currentUser = user;
         }
 
-        private void JoinButton_Click(object sender, RoutedEventArgs e)
+        private async void JoinButton_Click(object sender, RoutedEventArgs e)
         {
             string code = LobbyCodeTextBox.Text.Trim();
 
@@ -39,17 +41,58 @@ namespace Finnldy.UI
                 return;
             }
 
-            SwipeView swipeView = new SwipeView(
-                currentUser,
-                new List<int>(),
-                new List<string>(),
-                true
-            );
-
-            swipeView.Show();
-            this.Close();
+            NetworkSession.Username = currentUser.Name;
+            NetworkSession.IsHost = false;
 
 
+            NetworkSession.IsClient = true;
+
+            NetworkSession.LobbyController.RegisterNetworkEvents();
+
+            // KI Anfang
+            // Chat
+            // Kannst du mir hier den Fehler finden und auch ausverbessen?
+            // Methdoe bei Zeile 85( OnNetworkPacketReceived ) war auch von ihn und meinte dass ich es trennen sollte
+            NetworkSession.LobbyController.NetworkPacketReceived += OnNetworkPacketReceived;
+            NetworkSession.LobbyController.NetworkStatusChanged += message =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Console.WriteLine(message);
+                });
+            };
+            // KI-Ende
+
+            await NetworkSession.Client.ConnectAsync(code, 5000);
+
+
+            MessageBox.Show("Verbunden. Warte, bis der Host die Lobby startet.");
+
+
+
+
+
+        }
+
+        private void OnNetworkPacketReceived(NetworkPacket packet)
+        {
+            if (packet.Type != "lobbySettings")
+            {
+                return;
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                SwipeView swipeView = new SwipeView(
+                    currentUser,
+                    packet.WantedGenreIds,
+                    packet.WantedLanguages,
+                    packet.HideAdultMovies
+                );
+
+                swipeView.Show();
+                Close();
+            });
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)

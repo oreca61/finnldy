@@ -22,7 +22,12 @@ namespace Finnldy.BLL
         public event Action<NetworkPacket>? NetworkPacketReceived;
         public event Action<string>? NetworkStatusChanged;
 
+        private readonly Dictionary<int, HashSet<string>> likedUsersByMovie = new Dictionary<int, HashSet<string>>();
+
+        // schaus dir ncohmal an könnte proboleme machen(lass hoffen nciht)
         private bool networkEventsRegistered = false;
+
+        
 
         public void CreateUser(string Name)
         {
@@ -31,6 +36,8 @@ namespace Finnldy.BLL
             // Musst es der Datenbank auch geben
         }
         
+
+
         public async void LoadAllMovies()
         {
             
@@ -97,7 +104,9 @@ namespace Finnldy.BLL
 
                 if(user == null)
                 {
+                    database.CreateUser(Data.Username);
                     return new ResponseToAPI(false, null, null);
+                    
                 }
                 Movies movie = movies.FindMovieById(Data.Movie_id.Value);
 
@@ -106,6 +115,7 @@ namespace Finnldy.BLL
                 {
                     case GetDataFromAPI.action.Liked: 
                         user.LikeMovie(movie); 
+                        
                         break;
                     case GetDataFromAPI.action.Disliked:
                         user.DislikeMovie(movie);
@@ -142,11 +152,231 @@ namespace Finnldy.BLL
                 return;
             }
 
-            
-            
-
 
         }
+
+        private GetDataFromAPI? ConvertPacketToGetDataFromAPI(NetworkPacket packet)
+        {
+            GetDataFromAPI.action? action = ConvertSwipeType(packet.SwipeType);
+
+            if (action == null)
+            {
+                return null;
+            }
+
+            return new GetDataFromAPI(
+                "GET",
+                packet.MovieId,
+                packet.Username,
+                action
+            );
+        }
+
+        private GetDataFromAPI.action? ConvertSwipeType(SwipeType swipeType)
+        {
+            switch (swipeType)
+            {
+                case SwipeType.Like:
+                    return GetDataFromAPI.action.Liked;
+
+                case SwipeType.Dislike:
+                    return GetDataFromAPI.action.Disliked;
+
+                case SwipeType.WatchLater:
+                    return GetDataFromAPI.action.Watchlater;
+
+                case SwipeType.Watched:
+                    return GetDataFromAPI.action.AlreadyWatched;
+
+                default:
+                    return null;
+            }
+        }
+
+
+        // KI Anfang
+        // Chat
+        // kannst du mir diese Methode verbessern?
+
+
+        private async Task ProcessNetworkPacket(NetworkPacket packet)
+        {
+            if (packet.Type == "lobbySettings")
+            {
+                NetworkPacketReceived?.Invoke(packet);
+                return;
+            }
+
+            if (packet.Type == "match")
+            {
+                NetworkPacketReceived?.Invoke(packet);
+                return;
+            }
+
+            if (packet.Type != "swipe")
+            {
+                return;
+            }
+
+            if (packet.SwipeType == SwipeType.Watched)
+            {
+                return;
+            }
+
+            GetDataFromAPI? data = ConvertPacketToGetDataFromAPI(packet);
+
+            if (data == null)
+            {
+                NetworkStatusChanged?.Invoke("NetworkPacket konnte nicht umgewandelt werden.");
+                return;
+            }
+
+            if (NetworkSession.IsHost)
+            {
+                ResponseToAPI response = await HandleRequest(data);
+
+                if (response.Status)
+                {
+                    NetworkStatusChanged?.Invoke("Swipe wurde mit HandleRequest verarbeitet.");
+                }
+                else
+                {
+                    NetworkStatusChanged?.Invoke("HandleRequest konnte den Swipe nicht verarbeiten.");
+                }
+
+                if (packet.SwipeType == SwipeType.Like)
+                {
+                    await CheckForMatch(packet);
+                }
+            }
+
+            NetworkPacketReceived?.Invoke(packet);
+        }
+
+        public void RegisterNetworkEvents()
+        {
+            if (networkEventsRegistered)
+            {
+                return;
+            }
+
+            NetworkSession.Host.PacketReceived += async packet =>
+            {
+                await ProcessNetworkPacket(packet);
+            };
+
+            NetworkSession.Client.PacketReceived += async packet =>
+            {
+                await ProcessNetworkPacket(packet);
+            };
+
+            NetworkSession.Host.StatusChanged += message =>
+            {
+                NetworkStatusChanged?.Invoke(message);
+            };
+
+            NetworkSession.Client.StatusChanged += message =>
+            {
+                NetworkStatusChanged?.Invoke(message);
+            };
+
+            networkEventsRegistered = true;
+        }
+
+        public async Task SendLobbySettingsAsync(
+         List<int> wantedGenreIds,
+         List<string> wantedLanguages,
+         bool hideAdultMovies)
+        {
+            NetworkPacket packet = new NetworkPacket
+            {
+                Type = "lobbySettings",
+                Username = NetworkSession.Username,
+                WantedGenreIds = wantedGenreIds,
+                WantedLanguages = wantedLanguages,
+                HideAdultMovies = hideAdultMovies,
+                Time = DateTime.Now
+            };
+
+            await NetworkSession.Host.SendToAllAsync(packet);
+        }
+
+
+        // KI Ende
+
+        public async Task SendSwipeOverNetwork(Movies movie, SwipeType swipeType)
+        {
+            NetworkPacket packet = new NetworkPacket
+            {
+                Type = "swipe",
+                Username = NetworkSession.Username,
+                MovieId = movie.ApiMovieId,
+                MovieTitle = movie.Name,
+                SwipeType = swipeType,
+                Time = DateTime.Now
+            };
+
+            if (NetworkSession.IsHost)
+            {
+                if (swipeType == SwipeType.Like)
+                {
+                    await CheckForMatch(packet);
+                }
+
+                await NetworkSession.Host.SendToAllAsync(packet);
+            }
+            else if (NetworkSession.IsClient)
+            {
+                await NetworkSession.Client.SendAsync(packet);
+            }
+            else
+            {
+                NetworkStatusChanged?.Invoke("Nicht verbunden. Swipe wurde nicht gesendet.");
+            }
+        }
+
+        public void Moviesfüllen(List<Movies> movieList)
+        {
+            movies.movies = movieList;
+        }
+
+
+        private async Task CheckForMatch(NetworkPacket packet)
+        {
+            if (packet.SwipeType != SwipeType.Like)
+            {
+                return;
+            }
+
+            if (!likedUsersByMovie.ContainsKey(packet.MovieId))
+            {
+                likedUsersByMovie[packet.MovieId] = new HashSet<string>();
+            }
+
+            likedUsersByMovie[packet.MovieId].Add(packet.Username);
+
+            if (likedUsersByMovie[packet.MovieId].Count >= 2)
+            {
+                NetworkPacket matchPacket = new NetworkPacket
+                {
+                    Type = "match",
+                    Username = "Host",
+                    MovieId = packet.MovieId,
+                    MovieTitle = packet.MovieTitle,
+                    MatchFound = true,
+                    Time = DateTime.Now
+                };
+
+                NetworkPacketReceived?.Invoke(matchPacket);
+
+                if (NetworkSession.IsHost)
+                {
+                    await NetworkSession.Host.SendToAllAsync(matchPacket);
+                }
+            }
+        }
+
+
 
         public void StartLobby()
         {

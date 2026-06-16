@@ -29,6 +29,7 @@ namespace Finnldy.UI
 
 
 
+
         public LobbyView(User user, List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
         {
             InitializeComponent();
@@ -38,10 +39,48 @@ namespace Finnldy.UI
             this.wantedGenreIds = wantedGenreIds;
             this.wantedLanguages = wantedLanguages;
             this.hideAdultMovies = hideAdultMovies;
+
+            StartHost();
         }
 
-        private void StartSwipeButton_Click(object sender, RoutedEventArgs e)
+        private void StartHost()
         {
+            NetworkSession.Username = currentUser.Name;
+            NetworkSession.IsHost = true;
+            NetworkSession.IsClient = false;
+
+            NetworkSession.LobbyController.RegisterNetworkEvents();
+
+            NetworkSession.LobbyController.NetworkStatusChanged += message =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Console.WriteLine(message);
+
+                    if (message.Contains("Client verbunden"))
+                    {
+                        MessageBox.Show("Ein Client ist der Lobby beigetreten.");
+                    }
+                });
+            };
+
+            _ = Task.Run(async () =>
+            {
+                await NetworkSession.Host.StartAsync(5000);
+            });
+
+            LobbyCodeText.Text = HostNetworkService.GetLocalIpAddress();
+        }
+
+        private async void StartSwipeButton_Click(object sender, RoutedEventArgs e)
+        {
+            await NetworkSession.LobbyController.SendLobbySettingsAsync( 
+                wantedGenreIds, 
+                wantedLanguages , 
+                hideAdultMovies );
+
+
+
             SwipeView swipeView = new SwipeView(
                 currentUser,
                 wantedGenreIds,
@@ -52,9 +91,8 @@ namespace Finnldy.UI
 
 
             swipeView.Show();
-            this.Close();
+            Close();
         }
-
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             HomeView homeView = new HomeView();

@@ -1,5 +1,4 @@
-﻿using Finnldy.BLL;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -16,7 +15,10 @@ namespace Finnldy.DAL
         public event Action<NetworkPacket>? PacketReceived;
         public event Action<string>? StatusChanged;
 
-        public LobbyController Lobby;
+        private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public async Task StartAsync(int port = 5000)
         {
@@ -73,18 +75,17 @@ namespace Finnldy.DAL
                         break;
                     }
 
-                    NetworkPacket? packet = JsonSerializer.Deserialize<NetworkPacket>(json);
+                    NetworkPacket? packet = JsonSerializer.Deserialize<NetworkPacket>(json, jsonOptions);
 
                     if (packet == null)
                     {
+                        StatusChanged?.Invoke("Ungültiges NetworkPacket empfangen.");
                         continue;
                     }
 
-                    GetDataFromAPI Data = Convert(packet);
+                    PacketReceived?.Invoke(packet);
 
-                    await Lobby.HandleRequest(Data);
-
-
+                    await SendToAllExceptAsync(packet, client);
                 }
             }
             catch
@@ -211,48 +212,6 @@ namespace Finnldy.DAL
             }
 
             return "127.0.0.1";
-        }
-
-        public static GetDataFromAPI? Convert(NetworkPacket packet)
-        {
-            if (packet == null)
-            {
-                return null;
-            }
-
-            GetDataFromAPI.action? action = ConvertSwipeType(packet.SwipeType);
-
-            if (action == null)
-            {
-                return null;
-            }
-
-            return new GetDataFromAPI(
-                "GET",
-                packet.MovieId,
-                packet.Username,
-                action
-            );
-        }
-        private static GetDataFromAPI.action? ConvertSwipeType(SwipeType swipeType)
-        {
-            switch (swipeType)
-            {
-                case SwipeType.Like:
-                    return GetDataFromAPI.action.Liked;
-
-                case SwipeType.Dislike:
-                    return GetDataFromAPI.action.Disliked;
-
-                case SwipeType.WatchLater:
-                    return GetDataFromAPI.action.Watchlater;
-
-                case SwipeType.Watched:
-                    return GetDataFromAPI.action.AlreadyWatched;
-
-                default:
-                    return null;
-            }
         }
     }
 }

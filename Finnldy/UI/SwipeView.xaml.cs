@@ -44,7 +44,46 @@ namespace Finnldy.UI
 
             movies = new List<Movies>();
             currentMovieIndex = 0;
+
+
+            NetworkSession.LobbyController.NetworkPacketReceived += OnNetworkPacketReceived;
         }
+
+        private void OnNetworkPacketReceived(NetworkPacket packet)
+        {
+            if (packet.Type == "match")
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show(
+                        "Match! Ihr wollt beide \"" + packet.MovieTitle + "\" schauen.",
+                        "Gemeinsamer Film gefunden"
+                    );
+                });
+
+                return;
+            }
+
+            if (packet.Type != "swipe")
+            {
+                return;
+            }
+
+            if (packet.SwipeType == SwipeType.Watched)
+            {
+                return;
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Show(
+                    packet.Username + " hat \"" + packet.MovieTitle + "\" " + packet.SwipeType,
+                    "Swipe empfangen"
+                );
+            });
+        }
+
+
 
         private async void SwipeView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -86,6 +125,19 @@ namespace Finnldy.UI
                         .Where(movie => movie.Adult == false)
                         .ToList();
                 }
+
+
+                //KI ANfang
+                // Chat
+                // Kannst du meine Sortier methode verbessern?
+                // ich hatte davor eine ganze methode die leider nciht funktoniert hat deswegen habe ich chat gefragt und hat sich hereausgestellt dass an nur 4 Zeilen braucht GGs
+                movies = movies
+                .OrderByDescending(movie =>  movie.Popularity)
+                .ThenBy(movie => movie.ApiMovieId)
+
+                .ToList();
+
+                NetworkSession.LobbyController.Moviesfüllen(movies);
 
                 currentMovieIndex = 0;
             }
@@ -187,7 +239,7 @@ namespace Finnldy.UI
             WatchLaterButton.IsEnabled = false;
         }
 
-        private void DislikeButton_Click(object sender, RoutedEventArgs e)
+        private async void  DislikeButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
 
@@ -197,6 +249,8 @@ namespace Finnldy.UI
             }
 
             Swipe swipe = swiperContoller.DislikeMovie(currentUser, currentMovie);
+
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Like);
 
             GoToNextMovie();
         }
@@ -215,7 +269,7 @@ namespace Finnldy.UI
             GoToNextMovie();
         }
 
-        private void WatchLaterButton_Click(object sender, RoutedEventArgs e)
+        private async void WatchLaterButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
 
@@ -226,10 +280,11 @@ namespace Finnldy.UI
 
             Swipe swipe = swiperContoller.AddWatchLaterMovie(currentUser, currentMovie);
 
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.WatchLater);
+
             GoToNextMovie();
         }
-
-        private void LikeButton_Click(object sender, RoutedEventArgs e)
+        private async void LikeButton_Click(object sender, RoutedEventArgs e)
         {
             Movies currentMovie = GetCurrentMovie();
 
@@ -240,9 +295,10 @@ namespace Finnldy.UI
 
             Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
 
+            await NetworkSession.LobbyController.SendSwipeOverNetwork(currentMovie, SwipeType.Like);
+
             GoToNextMovie();
         }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

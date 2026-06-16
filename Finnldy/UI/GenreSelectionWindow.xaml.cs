@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finnldy.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,8 @@ namespace Finnldy.UI
         public List<int> WantedGenreIds { get; private set; } = new List<int>();
         public List<string> WantedLanguages { get; private set; } = new List<string>();
         public bool HideAdultMovies { get; private set; }
+
+        public HostNetworkService networkService = new HostNetworkService();
 
         public GenreSelectionWindow()
         {
@@ -61,6 +64,8 @@ namespace Finnldy.UI
             AddLanguageIfChecked(SpanishLanguageCheckBox);
 
             HideAdultMovies = HideAdultMoviesCheckBox.IsChecked == true;
+
+
 
             DialogResult = true;
             Close();
