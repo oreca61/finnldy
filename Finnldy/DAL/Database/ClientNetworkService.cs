@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 
-namespace Finnldy.DAL
+namespace Finnldy.DAL.Database
 {
     public class ClientNetworkService
     {

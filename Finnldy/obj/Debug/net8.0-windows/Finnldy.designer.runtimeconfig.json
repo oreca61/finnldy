@@ -12,11 +12,11 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\Zenbook\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Zenbook\\.nuget\\packages"
+      "C:\\Users\\jakob\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\jakob\\.nuget\\packages"
     ],
     "configProperties": {
-      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true,
+      "CSWINRT_USE_WINDOWS_UI_XAML_PROJECTIONS": false,
       "Microsoft.NETCore.DotNetHostPolicy.SetAppPaths": true
     }
   }
