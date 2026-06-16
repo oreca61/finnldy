@@ -6,7 +6,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Finnldy.BLL
 {
@@ -28,7 +27,7 @@ namespace Finnldy.BLL
         // schaus dir ncohmal an könnte proboleme machen(lass hoffen nciht)
         private bool networkEventsRegistered = false;
 
-        
+
 
         public void CreateUser(string Name)
         {
@@ -37,76 +36,46 @@ namespace Finnldy.BLL
             // Musst es der Datenbank auch geben
         }
 
-        public async Task LoadAllMovies()
+
+
+        public async void LoadAllMovies()
         {
+
             try
             {
+                GetMovies getMovies = new GetMovies();
+
                 movies.movies = await GetMovies.GetPopularMoviesAsync();
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Fehler beim Laden der Filme: " + ex.Message);
-                movies.movies = new List<Movies>();
             }
-        
-        
+
+
+
         }
 
 
-        public async Task<List<Movies>> LoadAndFilterMovies( List<int> wantedGenreIds, List<string> wantedLanguages, bool hideAdultMovies)
-
+        public void FilterMovies()
         {
-            try
+            if (lobby.UnwantedGenreIds == null || lobby.UnwantedGenreIds.Count == 0)
             {
-                movies.movies = await GetMovies.GetPopularMoviesAsync();
-
-                FilterMovies(wantedGenreIds, wantedLanguages, hideAdultMovies);
-
-                return movies.movies;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fehler beim Laden und Filtern der Filme: " + ex.Message);
-                movies.movies = new List<Movies>();
-                return movies.movies;
-            }
-        }
-
-        public void FilterMovies( List<int> wantedGenreIds, List<string> wantedLanguages,bool hideAdultMovies)
-        {
-            if (wantedGenreIds != null && wantedGenreIds.Count > 0)
-            {
-                movies.movies = movies.movies
-                    .Where(movie => movie.GenreIds.Any(genreId => wantedGenreIds.Contains(genreId)))
-                    .ToList();
+                return;
             }
 
-            if (wantedLanguages != null && wantedLanguages.Count > 0)
-            {
-                movies.movies = movies.movies
-                    .Where(movie => wantedLanguages.Contains(movie.OriginalLanguage))
-                    .ToList();
-            }
-
-            if (hideAdultMovies)
-            {
-                movies.movies = movies.movies
-                    .Where(movie => movie.Adult == false)
-                    .ToList();
-            }
-        }
-
-        public List<Movies> GetFilteredMovies()
-        {
-            return movies.movies;
+            movies.movies = movies.movies
+                .Where(movie => !movie.GenreIds.Any(genreId => lobby.UnwantedGenreIds.Contains(genreId)))
+                .ToList();
         }
 
 
         public async Task<ResponseToAPI> HandleRequest(GetDataFromAPI Data)
         {
-            if(Data.Status == "POST")
+            if (Data.Status == "POST")
             {
-                if(lobby.IsAtive == false)
+                if (lobby.IsAtive == false)
                 {
 
 
@@ -128,25 +97,25 @@ namespace Finnldy.BLL
 
                 }
             }
-            if(Data.Status == "GET")
+            if (Data.Status == "GET")
             {
 
                 User? user = await database.GetUser(Data.Username);
 
-                if(user == null)
+                if (user == null)
                 {
                     database.CreateUser(Data.Username);
                     return new ResponseToAPI(false, null, null);
-                    
+
                 }
                 Movies movie = movies.FindMovieById(Data.Movie_id.Value);
 
 
                 switch (Data.Action)
                 {
-                    case GetDataFromAPI.action.Liked: 
-                        user.LikeMovie(movie); 
-                        
+                    case GetDataFromAPI.action.Liked:
+                        user.LikeMovie(movie);
+
                         break;
                     case GetDataFromAPI.action.Disliked:
                         user.DislikeMovie(movie);
@@ -176,9 +145,9 @@ namespace Finnldy.BLL
             lobby.AddUser(await database.GetUser(Name));
         }
 
-        public void CreateLobby (string Name)
+        public void CreateLobby(string Name)
         {
-            if(lobby != null)
+            if (lobby != null)
             {
                 return;
             }
@@ -332,9 +301,86 @@ namespace Finnldy.BLL
             await NetworkSession.Host.SendToAllAsync(packet);
         }
 
-        public async Task asybStartLobby()
+
+        // KI Ende
+
+        public async Task SendSwipeOverNetwork(Movies movie, SwipeType swipeType)
         {
-            await LoadAllMovies();
+            NetworkPacket packet = new NetworkPacket
+            {
+                Type = "swipe",
+                Username = NetworkSession.Username,
+                MovieId = movie.ApiMovieId,
+                MovieTitle = movie.Name,
+                SwipeType = swipeType,
+                Time = DateTime.Now
+            };
+
+            if (NetworkSession.IsHost)
+            {
+                if (swipeType == SwipeType.Like)
+                {
+                    await CheckForMatch(packet);
+                }
+
+                await NetworkSession.Host.SendToAllAsync(packet);
+            }
+            else if (NetworkSession.IsClient)
+            {
+                await NetworkSession.Client.SendAsync(packet);
+            }
+            else
+            {
+                NetworkStatusChanged?.Invoke("Nicht verbunden. Swipe wurde nicht gesendet.");
+            }
+        }
+
+        public void Moviesfüllen(List<Movies> movieList)
+        {
+            movies.movies = movieList;
+        }
+
+
+        private async Task CheckForMatch(NetworkPacket packet)
+        {
+            if (packet.SwipeType != SwipeType.Like)
+            {
+                return;
+            }
+
+            if (!likedUsersByMovie.ContainsKey(packet.MovieId))
+            {
+                likedUsersByMovie[packet.MovieId] = new HashSet<string>();
+            }
+
+            likedUsersByMovie[packet.MovieId].Add(packet.Username);
+
+            if (likedUsersByMovie[packet.MovieId].Count >= 2)
+            {
+                NetworkPacket matchPacket = new NetworkPacket
+                {
+                    Type = "match",
+                    Username = "Host",
+                    MovieId = packet.MovieId,
+                    MovieTitle = packet.MovieTitle,
+                    MatchFound = true,
+                    Time = DateTime.Now
+                };
+
+                NetworkPacketReceived?.Invoke(matchPacket);
+
+                if (NetworkSession.IsHost)
+                {
+                    await NetworkSession.Host.SendToAllAsync(matchPacket);
+                }
+            }
+        }
+
+
+
+        public void StartLobby()
+        {
+            LoadAllMovies();
         }
 
 
@@ -356,10 +402,10 @@ namespace Finnldy.BLL
 
             if (index + 1 < movies.movies.Count)
             {
-                return movies.movies[index + 1]; 
+                return movies.movies[index + 1];
             }
 
-            return null; 
+            return null;
         }
     }
 }

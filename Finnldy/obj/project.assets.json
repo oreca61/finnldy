@@ -1,26 +1,26 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
-    "net8.0-windows": {}
+    "net8.0-windows7.0": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0-windows": []
+    "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\jakob\\.nuget\\packages\\": {}
+    "C:\\Users\\Zenbook\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jakob\\source\\repos\\Finnldy\\Finnldy\\Finnldy.csproj",
+      "projectUniqueName": "C:\\Users\\Zenbook\\source\\repos\\Finnldy\\Finnldy\\Finnldy.csproj",
       "projectName": "Finnldy",
-      "projectPath": "C:\\Users\\jakob\\source\\repos\\Finnldy\\Finnldy\\Finnldy.csproj",
-      "packagesPath": "C:\\Users\\jakob\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jakob\\source\\repos\\Finnldy\\Finnldy\\obj\\",
+      "projectPath": "C:\\Users\\Zenbook\\source\\repos\\Finnldy\\Finnldy\\Finnldy.csproj",
+      "packagesPath": "C:\\Users\\Zenbook\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Zenbook\\source\\repos\\Finnldy\\Finnldy\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jakob\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Zenbook\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -31,8 +31,7 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0-windows": {
-          "framework": "net8.0-windows7.0",
+        "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {}
         }
@@ -46,12 +45,10 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "10.0.300"
+      }
     },
     "frameworks": {
-      "net8.0-windows": {
-        "framework": "net8.0-windows7.0",
+      "net8.0-windows7.0": {
         "targetAlias": "net8.0-windows",
         "imports": [
           "net461",
@@ -72,7 +69,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
