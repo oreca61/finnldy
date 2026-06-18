@@ -40,6 +40,7 @@ namespace Finnldy.DAL.Database
             return await response.Content.ReadFromJsonAsync<User>();
         }
 
+
         public async Task<User?> CreateUser(string name)
         {
             var request = new 

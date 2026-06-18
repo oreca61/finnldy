@@ -149,7 +149,7 @@
                             BorderThickness="1">
 
                         <TextBlock x:Name="LobbyCodeText"
-                                   Text="Mero der Große"
+                                   Text="Mero"
                                    Foreground="#E11D48"
                                    FontSize="42"
                                    FontWeight="Black"

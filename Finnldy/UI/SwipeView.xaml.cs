@@ -88,13 +88,6 @@ namespace Finnldy.UI
                 return;
             }
 
-            Dispatcher.Invoke(() =>
-            {
-                MessageBox.Show(
-                    packet.Username + " hat \"" + packet.MovieTitle + "\" " + packet.SwipeType,
-                    "Swipe empfangen"
-                );
-            });
         }
 
 
@@ -250,8 +243,6 @@ namespace Finnldy.UI
                 AppLogger.Error("Like geklickt, aber currentMovie war null.");
                 return;
             }
-
-            AppLogger.Info(currentUser.Name + " liked Film: " + currentMovie.Name);
 
             Swipe swipe = swiperContoller.LikeMovie(currentUser, currentMovie);
 
