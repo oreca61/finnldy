@@ -22,6 +22,8 @@ namespace Finnldy.BLL
             resultsByMovieId[movie.ApiMovieId].AddSwipe(username, swipeType);
         }
 
+        // Sorft dafür das bei gleichem Score der Film mit der höheren Bewerung zuerst kommt
+
         public List<Result> GetBestResults()
         {
             return resultsByMovieId.Values

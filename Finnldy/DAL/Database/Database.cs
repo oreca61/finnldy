@@ -51,6 +51,7 @@ namespace Finnldy.DAL.Database
             }
         }
 
+
         public async Task<User?> CreateUser(string name)
         {
             try

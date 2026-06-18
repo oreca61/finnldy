@@ -1,7 +1,11 @@
 ﻿using Finnldy.BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Finnldy.UI
 {
@@ -23,38 +27,133 @@ namespace Finnldy.UI
             if (results == null || results.Count == 0)
             {
                 WinnerTitleText.Text = "Kein Ergebnis gefunden";
-                WinnerInfoText.Text = "Es wurden keine passenden Filme bewertet.";
+
+                WinnerScoreText.Text = "-";
+                WinnerLikesText.Text = "-";
+                WinnerDislikesText.Text = "-";
+                WinnerWatchLaterText.Text = "-";
+                WinnerRatingText.Text = "-";
+                WinnerCoverImage.Source = null;
+
+                HonorableMentionsPanel.Children.Clear();
+
+                TextBlock emptyText = new TextBlock();
+                emptyText.Text = "Keine weiteren Vorschläge vorhanden.";
+                emptyText.Foreground = new SolidColorBrush(Color.FromRgb(209, 213, 219));
+                emptyText.FontSize = 16;
+                emptyText.TextWrapping = TextWrapping.Wrap;
+
+                HonorableMentionsPanel.Children.Add(emptyText);
+
                 return;
             }
 
             Result winner = results.First();
 
             WinnerTitleText.Text = winner.Movie.Name;
+            WinnerScoreText.Text = winner.Score.ToString();
+            WinnerLikesText.Text = winner.Likes.ToString();
+            WinnerDislikesText.Text = winner.Dislikes.ToString();
+            WinnerWatchLaterText.Text = winner.WatchLater.ToString();
+            WinnerRatingText.Text = winner.Movie.VoteAverage.ToString("0.0") + " / 10";
 
-            WinnerInfoText.Text =
-                "Score: " + winner.Score +
-                " | Likes: " + winner.Likes +
-                " | Dislikes: " + winner.Dislikes +
-                " | Später ansehen: " + winner.WatchLater +
-                " | Bewertung: " + winner.Movie.VoteAverage.ToString("0.0") + " / 10";
+            LoadWinnerCover(winner.Movie);
 
-            ResultListBox.Items.Clear();
+            ShowHonorableMentions();
+        }
+
+        private void LoadWinnerCover(Movies movie)
+        {
+            try
+            {
+                if (movie == null || string.IsNullOrEmpty(movie.Cover))
+                {
+                    WinnerCoverImage.Source = null;
+                    return;
+                }
+
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(movie.Cover, UriKind.Absolute);
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+
+                WinnerCoverImage.Source = image;
+            }
+            catch
+            {
+                WinnerCoverImage.Source = null;
+            }
+        }
+
+
+
+        private void ShowHonorableMentions()
+        {
+            HonorableMentionsPanel.Children.Clear();
+
+            if (results == null || results.Count <= 1)
+            {
+                TextBlock emptyText = new TextBlock();
+                emptyText.Text = "Es gibt keine weiteren Vorschläge.";
+                emptyText.Foreground = new SolidColorBrush(Color.FromRgb(209, 213, 219));
+                emptyText.FontSize = 16;
+                emptyText.TextWrapping = TextWrapping.Wrap;
+
+                HonorableMentionsPanel.Children.Add(emptyText);
+
+                return;
+            }
 
             int place = 2;
 
-            foreach (Result result in results.Skip(1))
+            foreach (Result result in results.Skip(1).Take(4))
             {
-                string text =
-                    place + ". " +
-                    result.Movie.Name +
-                    " | Score: " + result.Score +
-                    " | Likes: " + result.Likes +
-                    " | Bewertung: " + result.Movie.VoteAverage.ToString("0.0") + " / 10";
+                Border card = CreateHonorableMentionCard(result, place);
 
-                ResultListBox.Items.Add(text);
+                HonorableMentionsPanel.Children.Add(card);
 
                 place++;
             }
+        }
+
+        // Mit Ki hilfe gemacht die Methode macht die Honrable Mentions also Filme die gut abgeschnitten haben aber nicht gewonnen haben
+
+
+        private Border CreateHonorableMentionCard(Result result, int place)
+        {
+            Border card = new Border();
+            card.Background = new SolidColorBrush(Color.FromRgb(17, 24, 39));
+            card.CornerRadius = new CornerRadius(16);
+            card.Padding = new Thickness(16);
+            card.Margin = new Thickness(0, 0, 0, 10);
+            card.BorderBrush = new SolidColorBrush(Color.FromRgb(55, 65, 81));
+            card.BorderThickness = new Thickness(1);
+
+            TextBlock text = new TextBlock();
+            text.Foreground = Brushes.White;
+            text.FontSize = 16;
+            text.TextWrapping = TextWrapping.Wrap;
+
+            text.Text =
+                place + ". " + result.Movie.Name +
+                "   |   Score: " + result.Score +
+                "   |   Likes: " + result.Likes +
+                "   |   Dislikes: " + result.Dislikes +
+                "   |   Später: " + result.WatchLater +
+                "   |   Bewertung: " + result.Movie.VoteAverage.ToString("0.0") + " / 10";
+
+            card.Child = text;
+
+            return card;
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            HomeView homeView = new HomeView();
+            homeView.Show();
+
+            this.Close();
         }
     }
 }

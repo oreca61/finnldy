@@ -32,6 +32,8 @@ namespace Finnldy.UI
             currentUser = user;
         }
 
+
+
         private async void JoinButton_Click(object sender, RoutedEventArgs e)
         {
             string code = LobbyCodeTextBox.Text.Trim();
