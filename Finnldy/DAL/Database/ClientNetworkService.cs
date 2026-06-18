@@ -10,41 +10,65 @@ namespace Finnldy.DAL.Database
         private TcpClient? client;
         private StreamReader? reader;
         private StreamWriter? writer;
+
         private bool isConnected;
 
         public event Action<NetworkPacket>? PacketReceived;
         public event Action<string>? StatusChanged;
 
-        public async Task ConnectAsync(string hostIp, int port = 5000)
+        // Chat Verwendung einzelene Sachen:
+        // Invoke Diem hat es mir dann erklärt :)
+        // ReadLineAsync hat mir Chat auch empfohlen
+
+        // Solche Lines hab ich als CL angegeben 
+
+        public async Task ConnectAsync(string hostIp)
         {
             if (isConnected)
             {
                 return;
+
             }
 
             try
             {
                 client = new TcpClient();
-                await client.ConnectAsync(hostIp, port);
 
-                NetworkStream stream = client.GetStream();
+                await client.ConnectAsync(hostIp, 5000);
+
+                // KI anfang
+                // CHat
+                // Kannst du mir bei dieser klasse helfen irgedwiw skipped es alles manchmal
+
+                NetworkStream stream = client.GetStream(); 
 
                 reader = new StreamReader(stream, Encoding.UTF8);
+                
+
                 writer = new StreamWriter(stream, Encoding.UTF8)
                 {
                     AutoFlush = true
+
                 };
 
                 isConnected = true;
 
-                StatusChanged?.Invoke($"Verbunden mit Host {hostIp}:{port}");
+                StatusChanged?.Invoke($"Verbunden mit Host {hostIp}:{5000}");
 
                 _ = Task.Run(ListenAsync);
+
+                // KI Ende
             }
             catch (Exception ex)
             {
+
                 StatusChanged?.Invoke("Verbindung fehlgeschlagen: " + ex.Message);
+
+
             }
+
+            
+
         }
 
         private async Task ListenAsync()
@@ -53,30 +77,42 @@ namespace Finnldy.DAL.Database
             {
                 while (isConnected && reader != null)
                 {
-                    string? json = await reader.ReadLineAsync();
+
+                    string? json = await reader.ReadLineAsync(); //CL
+
+
 
                     if (string.IsNullOrWhiteSpace(json))
                     {
                         break;
+
                     }
 
                     NetworkPacket? packet = JsonSerializer.Deserialize<NetworkPacket>(json);
 
+
                     if (packet == null)
                     {
                         continue;
+
                     }
 
-                    PacketReceived?.Invoke(packet);
+                    PacketReceived?.Invoke(packet); //CL
                 }
             }
             catch
             {
-                StatusChanged?.Invoke("Verbindung zum Host verloren.");
+                //StatusChanged?.Invoke("Verbindung getrennt.");
+
+                if (StatusChanged == null)
+                {
+                    StatusChanged("verbinddung getrennt.");
+                }
             }
             finally
             {
                 Disconnect();
+
             }
         }
 
@@ -84,7 +120,7 @@ namespace Finnldy.DAL.Database
         {
             if (!isConnected || writer == null)
             {
-                StatusChanged?.Invoke("Nicht verbunden. Nachricht wurde nicht gesendet.");
+                StatusChanged?.Invoke("Nicht verbunden nachricht wurde nicht gesendet."); //CL
                 return;
             }
 
@@ -95,11 +131,13 @@ namespace Finnldy.DAL.Database
 
         public void Disconnect()
         {
+
             isConnected = false;
 
             reader?.Close();
             writer?.Close();
             client?.Close();
+
 
             StatusChanged?.Invoke("Client getrennt.");
         }

@@ -140,6 +140,9 @@
                     <Button Content="Join a Lobby"
                             Style="{StaticResource SecondaryButton}"
                             Click="JoinLobbyButton_Click"/>
+                    <Button Content="WatchLater Filme anzeigen"
+            Style="{StaticResource SecondaryButton}"
+            Click="WatchLaterButton_Click"/>    
 
 
                 </StackPanel>

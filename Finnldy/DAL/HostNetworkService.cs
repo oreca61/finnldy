@@ -20,7 +20,15 @@ namespace Finnldy.DAL
             PropertyNameCaseInsensitive = true
         };
 
-        public async Task StartAsync(int port = 5000)
+        // Chat Verwendung einzelene Sachen:
+        // Invoke Diem hat es mir dann erklärt :)
+        // lock dass nur ein thread auf einmal geht
+        // ReadLineAsync hat mir Chat auch empfohlen
+        // und Encoding.UTF8.GetBytes(json);
+
+        // Solche Lines hab ich als CL angegeben 
+
+        public async Task StartAsync()
         {
             if (isRunning)
             {
@@ -29,26 +37,40 @@ namespace Finnldy.DAL
 
             isRunning = true;
 
-            listener = new TcpListener(IPAddress.Any, port);
+            listener = new TcpListener(IPAddress.Any, 5000);
             listener.Start();
 
-            StatusChanged?.Invoke($"Host gestartet. IP: {GetLocalIpAddress()} Port: {port}");
+            StatusChanged?.Invoke($"Host gestartet. IP: {GetLocalIpAddress()} Port: {5000}");
 
+            // KI 
+            // Kannst du meine Schleife verbessern da müsste ein Fehler drinnen sein
             while (isRunning)
             {
                 try
                 {
+
+
                     TcpClient client = await listener.AcceptTcpClientAsync();
 
                     lock (clients)
                     {
                         clients.Add(client);
+
                     }
 
-                    StatusChanged?.Invoke("Client verbunden.");
+                    // Davor habe ich invoke verwenden aber hat irgedwie nicht funktioniert
+
+                    if (StatusChanged != null)
+                    {
+                        StatusChanged("Client verbunden.");
+
+                    }
+
+
 
                     _ = Task.Run(() => HandleClientAsync(client));
                 }
+            // KI ende
                 catch
                 {
                     if (isRunning)
@@ -64,33 +86,40 @@ namespace Finnldy.DAL
             try
             {
                 using NetworkStream stream = client.GetStream();
+
                 using StreamReader reader = new StreamReader(stream, Encoding.UTF8);
 
                 while (isRunning && client.Connected)
                 {
-                    string? json = await reader.ReadLineAsync();
+
+                    string? json = await reader.ReadLineAsync(); //CL
 
                     if (string.IsNullOrWhiteSpace(json))
                     {
+
                         break;
                     }
 
                     NetworkPacket? packet = JsonSerializer.Deserialize<NetworkPacket>(json, jsonOptions);
 
+
                     if (packet == null)
                     {
-                        StatusChanged?.Invoke("Ungültiges NetworkPacket empfangen.");
+                    
                         continue;
                     }
 
-                    PacketReceived?.Invoke(packet);
+                    PacketReceived?.Invoke(packet); // CL
 
                     await SendToAllExceptAsync(packet, client);
                 }
             }
             catch
             {
-                StatusChanged?.Invoke("Client getrennt.");
+                if (StatusChanged == null)
+                {
+                    StatusChanged("Client getrennt.");
+                }
             }
             finally
             {
@@ -106,7 +135,8 @@ namespace Finnldy.DAL
         public async Task SendToAllAsync(NetworkPacket packet)
         {
             string json = JsonSerializer.Serialize(packet) + "\n";
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
+
+            byte[] bytes = Encoding.UTF8.GetBytes(json); //CL
 
             List<TcpClient> clientsCopy;
 
@@ -143,7 +173,8 @@ namespace Finnldy.DAL
         private async Task SendToAllExceptAsync(NetworkPacket packet, TcpClient exceptClient)
         {
             string json = JsonSerializer.Serialize(packet) + "\n";
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
+
+            byte[] bytes = Encoding.UTF8.GetBytes(json); //CL
 
             List<TcpClient> clientsCopy;
 
@@ -167,8 +198,9 @@ namespace Finnldy.DAL
                     }
 
                     NetworkStream stream = client.GetStream();
-                    await stream.WriteAsync(bytes, 0, bytes.Length);
-                    await stream.FlushAsync();
+                    await stream.WriteAsync(bytes, 0, bytes.Length); //CL
+
+                    await stream.FlushAsync(); // CL
                 }
                 catch
                 {
@@ -194,20 +226,26 @@ namespace Finnldy.DAL
                 }
 
                 clients.Clear();
+
+
             }
 
             listener?.Stop();
 
-            StatusChanged?.Invoke("Host gestoppt.");
+            StatusChanged?.Invoke("Host gestoppt."); // CL
         }
 
         public static string GetLocalIpAddress()
         {
-            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+
+            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList) // Diese If bedngung hat Chat gemacht habe ihn den prottypen vom if gesschickt und mir das gegeben
             {
+
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
                     return ip.ToString();
+
+
                 }
             }
 

@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Finnldy.DAL;
 
 namespace Finnldy.UI
 {
@@ -35,16 +36,20 @@ namespace Finnldy.UI
             return true;
         }
 
-        private void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {
             if (!CreateCurrentUser())
             {
                 return;
             }
 
+            bool userCreated = await NetworkSession.LobbyController.Userkontrolle(currentUser.Name);
+
             GenreSelectionWindow genreWindow = new GenreSelectionWindow();
 
             bool? result = genreWindow.ShowDialog();
+
+            int maxSwipes = genreWindow.MaxSwipes;
 
             if (result == true)
             {
@@ -52,7 +57,9 @@ namespace Finnldy.UI
                     currentUser,
                     genreWindow.WantedGenreIds,
                     genreWindow.WantedLanguages,
-                    genreWindow.HideAdultMovies
+                    genreWindow.HideAdultMovies,
+                    genreWindow.MaxSwipes
+
                 );
 
                 lobbyView.Show();
@@ -76,6 +83,12 @@ namespace Finnldy.UI
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void WatchLaterButton_Click(object sender, RoutedEventArgs e)
+        {
+            WatchLaterView watchLaterView = new WatchLaterView();
+            watchLaterView.Show();
         }
     }
 }

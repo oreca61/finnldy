@@ -64,7 +64,7 @@ namespace Finnldy.UI
             };
             // KI-Ende
 
-            await NetworkSession.Client.ConnectAsync(code, 5000);
+            await NetworkSession.Client.ConnectAsync(code);
 
 
             MessageBox.Show("Verbunden. Warte, bis der Host die Lobby startet.");

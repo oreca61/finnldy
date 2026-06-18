@@ -24,6 +24,8 @@ namespace Finnldy.UI
         public List<string> WantedLanguages { get; private set; } = new List<string>();
         public bool HideAdultMovies { get; private set; }
 
+        public int MaxSwipes { get; private set; }
+
         public HostNetworkService networkService = new HostNetworkService();
 
         public GenreSelectionWindow()
@@ -62,10 +64,29 @@ namespace Finnldy.UI
             AddLanguageIfChecked(KoreanLanguageCheckBox);
             AddLanguageIfChecked(FrenchLanguageCheckBox);
             AddLanguageIfChecked(SpanishLanguageCheckBox);
+            AddLanguageIfChecked(ItalianLanguageCheckBox);
 
             HideAdultMovies = HideAdultMoviesCheckBox.IsChecked == true;
 
+            if (!int.TryParse(MaxSwipesTextBox.Text, out int enteredMaxSwipes))
+            {
+                MessageBox.Show("Bitte gib eine gültige Swipe-Anzahl ein.");
+                return;
+            }
 
+            if (enteredMaxSwipes <= 0)
+            {
+                MessageBox.Show("Die Swipe-Anzahl muss größer als 0 sein.");
+                return;
+            }
+
+            if (enteredMaxSwipes > 100)
+            {
+                MessageBox.Show("Bitte gib maximal 100 Swipes ein.");
+                return;
+            }
+
+            MaxSwipes = enteredMaxSwipes;
 
             DialogResult = true;
             Close();

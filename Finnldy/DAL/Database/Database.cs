@@ -7,6 +7,7 @@ using System.Text;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Net;
+using System.Windows.Controls;
 
 namespace Finnldy.DAL.Database
 {
@@ -14,12 +15,15 @@ namespace Finnldy.DAL.Database
     {
         private readonly HttpClient _httpClient;
 
+        // KI
+        // Kannst den kontruktor machen plz
         public Database()
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("http://localhost:8000");
         }
 
+        // KI ende
         public async Task<List<User>> GetAllUsers()
         {
             var users = await _httpClient.GetFromJsonAsync<List<User>>("/users/");
@@ -28,33 +32,51 @@ namespace Finnldy.DAL.Database
 
         public async Task<User?> GetUser(string username)
         {
-            string encodedUsername = Uri.EscapeDataString(username);
+            try
+            {
+                string encodedUsername = Uri.EscapeDataString(username);
 
-            var response = await _httpClient.GetAsync($"/users/by-name/{encodedUsername}");
+                var response = await _httpClient.GetAsync($"/users/by-name/{encodedUsername}");
 
-            if (!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+            catch
             {
                 return null;
             }
-
-            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         public async Task<User?> CreateUser(string name)
         {
-            var request = new 
+            try
             {
-                name = name
-            };
 
-            var response = await _httpClient.PostAsJsonAsync("/users/", request);
 
-            if (!response.IsSuccessStatusCode)
+                var data = new
+                {
+                    name = name
+                };
+
+
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/users/");// Chat hat da mir geholfen und etwas stack overflow
+
+                request.Content = JsonContent.Create(data);
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                string body = await response.Content.ReadAsStringAsync();
+
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+            catch
             {
                 return null;
             }
-
-            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         public async Task<bool> DeleteUser(int userId)
